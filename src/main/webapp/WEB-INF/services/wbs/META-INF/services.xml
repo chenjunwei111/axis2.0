@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceGroup>
+    <!-- 指定服务名,随便定义 -->
+    <service name="ZipKinService">
+        <!-- 服务的作用说明，可写可不写 -->
+        <description>测试axis2webservices</description>
+        <!-- 指定要发布的类路径  自定义name-->
+        <parameter name="ServiceClass">
+            com.axis2.TestService
+        </parameter>
+        <!-- 类里面的方法名 ，若有多个方法，可以新增operation标签 -->
+        <operation name="test">
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+        </operation>
+    </service>
+</serviceGroup>
