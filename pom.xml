@@ -20,19 +20,33 @@
   </properties>
 
   <dependencies>
+
+      <dependency>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+          <version>1.2.17</version>
+      </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
         <groupId>com.alibaba</groupId>
           <artifactId>fastjson</artifactId>
          <version>1.2.28</version>
     </dependency>
-    
+
+
+      <dependency>
+          <groupId>org.jdom</groupId>
+          <artifactId>jdom2</artifactId>
+          <version>2.0.6</version>
+      </dependency>
+
      <!--servlet依赖-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -60,7 +74,89 @@
             <artifactId>xmlbeans</artifactId>
             <version>2.4.0</version>
         </dependency>
-    
+
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+          <version>4.5.3</version>
+      </dependency>
+
+
+        <!--axis1.4客户端-->
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-wsdl4j</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
+      <dependency>
+          <groupId>ommons-lang-2.6</groupId>
+          <artifactId>ommons-lang-2.6</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\commons-lang-2.6.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>commons-net-3.6</groupId>
+          <artifactId>commons-net-3.6</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\commons-net-3.6.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>j-ftp1.6</groupId>
+          <artifactId>j-ftp1.66</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\j-ftp1.6.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>ojdbc14-10.2.0.2.0</groupId>
+          <artifactId>ojdbc14-10.2.0.2.0</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\ojdbc14-10.2.0.2.0.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>poi-3.17</groupId>
+          <artifactId>poi-3.17</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\poi-3.17.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>poi-ooxml-3.17</groupId>
+          <artifactId>poi-ooxml-3.17</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\poi-ooxml-3.17.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>javacsv-2.0</groupId>
+          <artifactId>javacsv-2.0</artifactId>
+          <scope>system</scope>
+          <version>1.0</version>
+          <systemPath>${basedir}\src\main\webapp\WEB-INF\lib\javacsv-2.0.jar</systemPath>
+      </dependency>
+
+
+
   </dependencies>
 
   <build>

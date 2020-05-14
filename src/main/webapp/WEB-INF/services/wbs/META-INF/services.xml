@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serviceGroup>
     <!-- 指定服务名,随便定义 -->
-    <service name="ZipKinService">
+    <service name="spdbAxis2">
         <!-- 服务的作用说明，可写可不写 -->
-        <description>测试axis2webservices</description>
+        <description>axis2胜普多邦</description>
         <!-- 指定要发布的类路径  自定义name-->
         <parameter name="ServiceClass">
-            com.axis2.TestService
+            com.axis2.impl.EomsServiceImpl
         </parameter>
         <!-- 类里面的方法名 ，若有多个方法，可以新增operation标签 -->
-        <operation name="test">
+        <operation name="testSpdb">
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+        </operation>
+        <operation name="SheetInfoSer">
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+        </operation>
+<!--        <operation name="SheetInfoFtp">-->
+<!--            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>-->
+<!--        </operation>-->
+        <operation name="turnAnalyReport">
             <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
         </operation>
     </service>
