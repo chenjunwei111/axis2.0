@@ -1,17 +1,19 @@
 package com.axis2.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
+/**
+* Description 数据库工具类
+* @param
+* @Author junwei
+* @Date 14:19 2020/6/2
+**/
 public class jdbcUtil {
 
-    private static String driver = "oracle.jdbc.OracleDriver";
-    private static String url = "jdbc:oracle:thin:@192.168.20.170:5131:orcl131";
-    private static String user = "COC";
-    private static String password = "Spdb3412COC";
+    private static String driver = "oracle.jdbc.driver.OracleDriver";
+    private static String url = ConfigReaderUtils.getProperty("url");
+    private static String user = ConfigReaderUtils.getProperty("username");
+    private static String password = ConfigReaderUtils.getProperty("password");
 
     static{
         try {

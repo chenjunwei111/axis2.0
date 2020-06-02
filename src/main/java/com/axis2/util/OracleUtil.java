@@ -12,6 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
+
+/**
+* Description
+* @param
+* @Author 肖体俊
+* @Date 14:22 2020/6/2
+**/
 public class OracleUtil {
     private static final Logger log = Logger.getLogger(NsnServiceImpl.class.getClass());
     // 第一次透传数据查询并写入到json对象
@@ -133,7 +140,7 @@ public class OracleUtil {
     }
 
     //大数据平台查询数据并入库回传到COC131
-    public void NsnDataPickup(String ResponseString){
+    public static void NsnDataPickup(String ResponseString){
         //关键值提取,先创建JSONObject对象指向需要解析的JSON报文
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(ResponseString.trim());
         String message=jsonObject.getString("message");
@@ -165,7 +172,7 @@ public class OracleUtil {
     }
     //大数据平台返回数据接收到一个集合里面并且返回到一个JSONobject里面来
 
-    public String NsnSecondSendData(String ResponseString){
+    public static String NsnSecondSendData(String ResponseString){
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(ResponseString.trim());
         //data
         String ResponseStringRestore=jsonObject.get("data").toString();

@@ -1,6 +1,5 @@
 package com.axis2.util;
 
-import com.axis2.impl.NsnServiceImpl;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.IOUtils;
 
@@ -9,14 +8,22 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+* Description 二次请求内容
+* @param
+* @Author 肖体俊
+* @Date 14:41 2020/6/2
+**/
 public class SecondSendNsn {
 
-    private static final Logger log = Logger.getLogger(NsnServiceImpl.class.getClass());
+    private static final Logger log = Logger.getLogger(SecondSendNsn.class.getClass());
+    private static final Logger log2 = Logger.getLogger("FILE2");
+
     /**
      * 第二次发送Http post请求
      *
      */
-    public static String secDoHttpPost(String nsnDataSecSend, String urlSec) {
+    public static String secDoHttpPost(String nsnDataSecSend, String urlSec,Object orderNum,Object eomsNum) {
         System.out.println("发起的数据:" + nsnDataSecSend);
         byte[] xmlData = nsnDataSecSend.getBytes();
         InputStream instr = null;
@@ -41,12 +48,14 @@ public class SecondSendNsn {
             byte[] bis = IOUtils.toByteArray(instr);
             String ResponseString = new String(bis, "UTF-8");
             if ((ResponseString == null) || ("".equals(ResponseString.trim()))) {
-                System.out.println("返回空");
+                log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 二次透传无返回结果");
             }
-            System.out.println("二次透传完毕返回数据为:" + ResponseString);
+            log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 二次透传完毕返回数据为，内容为：\n"+ResponseString);
+
             return ResponseString;
 
         } catch (Exception e) {
+            log.error("*********************发送HTTP请求失败3.0",e);
             e.printStackTrace();
             return "0";
         } finally {
@@ -55,6 +64,7 @@ public class SecondSendNsn {
                 instr.close();
 
             } catch (Exception ex) {
+                log.error("*********************发送HTTP请求失败3.0",ex);
                 return "0";
             }
         }

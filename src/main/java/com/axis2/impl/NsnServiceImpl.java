@@ -3,7 +3,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.axis2.util.OracleUtil;
 import com.axis2.util.httpUtil;
-import com.axis2.util.jsonFormatUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -16,21 +15,30 @@ import org.apache.log4j.Logger;
 public class NsnServiceImpl {
 
     private static final Logger log = Logger.getLogger(NsnServiceImpl.class.getClass());
+    private static final Logger log2 = Logger.getLogger("FILE2");
 
     public static String url = "http://10.174.240.17:8082/ease-flow-console-v2/api/open/form/basic/save?userId=1";
 
     public static void main(String[] args) {
-        //
+        analyTurnToEoms();
+    }
+
+
+    public static  void  analyTurnToEoms(){
+        log.info("接收到预分析完成消息，开始数据回传EOMS。。。。。。");
         int orderId;
         //规整JSON格式
-        jsonFormatUtil jfu=new jsonFormatUtil();
+//        jsonFormatUtil jfu=new jsonFormatUtil();
         //按照大数据平台JSON对象要求格式进行回传,一单一单回传,先把所有需要回传工单实例化
         JSONArray complainArray=new OracleUtil().nsnTurnAnalyReport();
+        log.info("本次发送预分析完成工单："+complainArray.size()+"条");
+        log.info("开始执行HTTP 发送数据到 EMOS ，\n" +
+                " 概要日志//data1//spdbLogs//axisApp.log \n" +
+                " 明细日志//data1//spdbLogs//axisAppDetail.log \n");
 
         for(orderId=0;orderId<complainArray.size();orderId++){
             //获取我们每单需要传送的JSON报文
             String nsnData=complainArray.getString(orderId);
-//            log.info(jfu.formatJson(nsnData));
             JSONObject obj = new JSONObject();
             obj.put("city",JSONObject.parseObject(nsnData).get("city").toString());
             obj.put("region",JSONObject.parseObject(nsnData).get("region").toString());
@@ -40,16 +48,24 @@ public class NsnServiceImpl {
             obj.put("procDefKey", "complain10086_v1");
 
             //去除反斜杠进行最终结果输出
-//            String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(obj.toJSONString(obj));
             String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(obj.toJSONString());
             String jsoninfo_tmp1=jsoninfo_tmp.replace("\"{","{");
             //去除JSON子对象多余双引号以后的结果
             String jsoninfo=jsoninfo_tmp1.replace("}\"","}");
             //开始传送报文
-//            log.info(url);
-//            httpUtil hu=new httpUtil();
-            httpUtil.doHttpPost(jsoninfo,url);
+
+            Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
+            Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
+
+            log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"  数据封装完成，开始发送HTTP请求\n " +
+                    "发送地址："+url);
+
+            log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"\n 回传内容："+jsoninfo);
+            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum);
         }
+
     }
+
+
 }
 
