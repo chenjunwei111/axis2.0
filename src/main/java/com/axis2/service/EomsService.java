@@ -53,4 +53,13 @@ public interface EomsService {
      * @Date 9:53 2019/9/27
      **/
     public String turnAnalyReport(String sendSheet);
+
+
+    /**
+     * Description 报文返回到益阳平台
+     * @param
+     * @Author junwei
+     * @Date 9:53 2019/9/27
+     **/
+    public void turnAnalyReport2();
 }

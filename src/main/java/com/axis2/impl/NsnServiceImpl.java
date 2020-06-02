@@ -24,6 +24,12 @@ public class NsnServiceImpl {
     }
 
 
+    /**
+    * Description  核心代码
+    * @param
+    * @Author 肖体俊
+    * @Date 15:03 2020/6/2
+    **/
     public static  void  analyTurnToEoms(){
         log.info("接收到预分析完成消息，开始数据回传EOMS。。。。。。");
         int orderId;

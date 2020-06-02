@@ -32,14 +32,15 @@ public class OracleUtil {
                 + "b.complain_suggestion4,b.complain_suggestion5,a.cgi,a.analysis_result from\n"
                 + "(select S.NSN_ID, S.NSN_PARENT_ID,T.CITY, T.PROPERTY,F.工单流水号 crm_ordernum,F.备注1 analysis_result,F.LTE关键小区 cgi \n"
                 + "from TEMP_CP_COMPLAIN_LIST_ORDER_V1 T,FINAL_ANALYSIS_TABLE_V2_1 F,spdb_nsn_area_change S WHERE T.ORDERNUM=F.工单流水号 AND T.PROPERTY=S.SPDB_PROPERTY\n"
-                + ") a, (select EOMS_ORDERNUM order_name,BUSINESSTYPE order_theme,VERSION_DATE order_time,ORDER_ACCEPT_LIMIT_TIME accept_time_limit,\n"
-                + "NULL city,NULL region,UE_DATE complain_time,NULL customer_name,NULL customer_tel,NULL complain_area,BUSSINESSCONTENT complain_content,\n"
-                + "IF_BIG_AREA_COMPLAINT large_area_complain,NULL repeated_complaints,COMPLAINT_LEVEL customer_level,NULL home_subscriber,\n"
-                + "NULL complaint_acceptance_province,PHONENUM fault_msisdn,COMPLIANTPLACE fault_area,city complain_city,\n"
-                + "PROPERTY appeal_area,ORDERNUM crm_ordernum,NULL terminal_description,NULL td_supported,NULL analysis_condition,\n"
-                + "SENDTIME customer_dispatch_time,NULL demarcation_analysis_results,CCH_DEAL_TIME cch_sys_delimit_time,\n"
-                + "LOCATION_SUGGEST_ONE complain_suggestion1,NULL complain_suggestion2,NULL complain_suggestion3,\n"
-                + "NULL complain_suggestion4,NULL complain_suggestion5\n" + "from P_LTE_PARMETER_COMPLAINT \n"
+                + ") a, (select eoms_ordernum as  order_name,businesstype as order_theme,version_date as order_time,order_accept_limit_time as accept_time_limit,\n" +
+                " city,ue_property as region,ue_date as complain_time, customer_name, phonenum as customer_tel, complain_area,bussinesscontent as complain_content,\n" +
+                "if_big_area_complaint as large_area_complain, repeated_complaints,complaint_level as customer_level, home_subscriber,\n" +
+                " complaint_acceptance_province,phonenum as fault_msisdn,compliantplace as fault_area,city as complain_city,\n" +
+                "property as  appeal_area,ordernum as crm_ordernum, terminal_description, td_supported, analysis_condition,\n" +
+                "sendtime as customer_dispatch_time, demarcation_analysis_results,cch_deal_time cch_sys_delimit_time,\n" +
+                "complain_suggestion1, complain_suggestion2, complain_suggestion3,\n" +
+                "complain_suggestion4, complain_suggestion5\n" +
+                "from p_lte_parmeter_complaint \n"
                 + ")b where a.crm_ordernum=b.crm_ordernum";
 
         PreparedStatement pstmt = null;

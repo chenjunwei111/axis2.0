@@ -155,6 +155,17 @@ public class EomsServiceImpl implements EomsService {
     }
 
 
+    /**
+     * Description 预分析报文生成，返回到亿阳平台
+     * @param
+     * @Author junwei
+     * @Date 9:53 2019/9/27
+     **/
+    @Override
+    public void turnAnalyReport2() {
+        //调用肖老板的HTTP 请求代码
+        NsnServiceImpl.analyTurnToEoms();
+    }
 
 
     public static void main(String[] args) {

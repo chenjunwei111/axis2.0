@@ -11,6 +11,12 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+* Description 线程类
+* @param
+* @Author junwei
+* @Date 17:10 2020/6/2
+**/
 public class ThreadRun  extends Thread {
 
     private static final Logger log = Logger.getLogger(EomsServiceImpl.class.getClass());
@@ -31,7 +37,6 @@ public class ThreadRun  extends Thread {
         getComMsg(sendSheet,chhUrl);
     }
 
-
     /**
     * Description
     * @param sendSheet 工单报文
@@ -41,210 +46,255 @@ public class ThreadRun  extends Thread {
     **/
     public String getComMsg(String sendSheet, String chhUrl) {
         try {
-            //解析报文
-            List<Map<String, Object>> listTotal = XmlUtil.xmlElementsList(sendSheet.replace("\n", ""));
-            log.info("报文解析开始。。。。。");
-            String resposeMsg = "";
-            if (listTotal.size() == 0) {
-                resposeMsg = "Message Exception";
-                log.error("***********************报文异常，无法正常解析***********************");
-                return resposeMsg;
+            if(sendSheet!=null){
+                getEmosComMsg(sendSheet);
             }
-
-
-            //插入日志记录
-            String insertLogSql = " INSERT INTO AXIS_MESSAGE_LOG (MESSAGE_TYPE,CITY,VERSION_DATE,MESSAGE_ID,ACCEPT_TIME,MESSAGE_DETAIL ) " +
-                    "values(?,?,to_date(?,'yyyy-mm-dd'),?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?) ";
-
-            LinkedList tempList = new LinkedList<>();
-
-
-            String insertComSql = "insert into P_LTE_PARMETER_COMPLAINT(" +
-                    "CITY_CODE,CITY,VERSION_DATE,ORDERNUM,BUSINESSTYPE,ORDER_BENCH," +
-                    "PHONENUM,COMPLAINTTYPE2,COMPLIANTPLACE,BUSSINESSCONTENT,SENDTIME," +
-                    "PROPERTY,LONGITUDE,LATITUDE,UE_X,UE_Y,UE_ADDRESS,UE_PROPERTY,UE_DATE,COMPLAINT_LEVEL,STATE,ORDER_SOURCE," +
-                    "COMPLIANT_LOCATE_TYPE,VOICE_DATA_CLASSIFY,BUSINESS_CLASSIFY,PROBLEM_CLASSIFY,PROBLEM_DETAIL," +
-                    "ORDER_ACCEPT_LIMIT_TIME,CCH_DEAL_TIME,LOCATION_SUGGEST_ONE,IF_BIG_AREA_COMPLAINT,EOMS_ORDERNUM,FOLLOWER)" +
-                    " values(" +
-                    "?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?," +//6
-                    "?,?,?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss')," +//5
-                    "?,?,?,?,?,?,?,?,?,?,?," +//11
-                    "?,?,?,?,?," +//5
-                    "to_date(?,'yyyy-mm-dd hh24:mi:ss'),to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?,? ) ";//6
-
-            LinkedList tempList2 = new LinkedList<>();
-            log.info("遍历报文。。。。。");
-
-            for (Map<String, Object> map : listTotal) {
-                //       获取时间
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String time = sf.format(new Date());
-
-                String orderType = "工单";
-                //地市
-                String city = map.get("mainComplaintPlace") == null ? null : map.get("mainComplaintPlace").toString();
-                //报文ID（工单号）
-                String msgId = map.get("crmSheetId") == null ? null : map.get("crmSheetId").toString();
-
-
-                //检查工单是否存在
-                String checkSql = "select ordernum from P_LTE_PARMETER_COMPLAINT where ordernum='" + msgId + "'";
-
-                ResultSet rs = JdbcServer.executeStatement(checkSql);
-
-                while (rs.next()) {
-                    if (rs.getString(1) == null) {
-                        log.info("报文工单不存在：" + msgId + ",执行下一步");
-                    } else {
-                        log.info("报文工单已存在：" + msgId + ",终止执行下一步");
-                        orderType = "重复工单";
-                    }
-                }
-
-                LinkedHashMap<String, Object> map1 = new LinkedHashMap<>();
-                map1.put("MESSAGE_TYPE", orderType);
-                map1.put("CITY", city);
-                map1.put("VERSION_DATE", time.substring(0, 10));
-                map1.put("MESSAGE_ID", msgId);
-                map1.put("ACCEPT_TIME", time);
-                map1.put("MESSAGE_DETAIL", map.toString());
-                tempList.add(map1);
-
-                if ("重复工单".equals(orderType)) {
-                    resposeMsg += msgId + " order repeat \n";
-                    continue;
-                } else {
-                    //chh报文，调用FTP下载
-                    getFtpMsg(chhUrl.replace("\n", ""), msgId);
-                }
-
-
-                String cityCode = null;
-                String checkCityCode = "select CITY_CODE from department_level where CITY_NAME='" + city + "' and rownum=1  ";
-                ResultSet rs2 = JdbcServer.executeStatement(checkCityCode);
-                while (rs2.next()) {
-                    cityCode = rs2.getString(1);
-                }
-
-                String lat = null;
-                String lng = null;
-
-                String sAddree=null;
-                String sProperty=null;
-                log.info("开始获取经纬度。。。。");
-                List<WebDeCoding> list = MapUtil.getBaiDuPoint(map.get("faultSite").toString(), city, null);
-
-                if (list != null && list.size() != 0 && list.get(0).getPoint() != null) {
-                    WebDeCoding web = list.get(0);
-                    BaiduPoint point = PositionUtil.bd09_To_BaiduPoint84(web.getPoint().getLat(), web.getPoint().getLng());
-                    lat = String.valueOf(point.getLat());
-                    lng = String.valueOf(point.getLng());
-                    sAddree=web.getAddr();
-
-                    //获取经纬度
-                    String checkProprtysql = "select DEPT_NAME From department\n" +
-                            "where instr('"+web.getArea()+"',REGION_NAME)>0\n" +
-                            "and PARENT_DEPT_CODE!='YUNNAN' ";
-                    ResultSet rs3 = JdbcServer.executeStatement(checkProprtysql);
-                    while (rs3.next()) {
-                        sProperty = rs3.getString(1);
-                    }
-
-                } else {
-                    log.info("无法获取经纬度");
-                }
-
-                LinkedHashMap<String, Object> map2 = new LinkedHashMap<>();
-                //6
-                map2.put("CITY_CODE", cityCode);
-                map2.put("CITY", city);
-                map2.put("VERSION_DATE", map.get("sendTime") == null ? null : map.get("sendTime").toString().substring(0, 19));
-                map2.put("ORDERNUM", map.get("crmSheetId") == null ? null : map.get("crmSheetId"));
-                map2.put("BUSINESSTYPE", map.get("title") == null ? null : map.get("title"));
-
-                //20200317 jw新增5G判断工单
-                Object tilte=map2.get("BUSINESSTYPE");
-                String order_bench="LTE投诉";
-                if(tilte!=null && tilte.toString().toUpperCase().indexOf("5G")>=0){
-                    order_bench="5G投诉";
-                }
-                map2.put("ORDER_BENCH",order_bench);
-
-
-                //5
-                map2.put("PHONENUM", map.get("complaintNum") == null ? null : map.get("complaintNum"));
-                map2.put("COMPLAINTTYPE2", map.get("complaintType6") == null ? null : map.get("complaintType6"));
-                map2.put("COMPLIANTPLACE", map.get("faultSite") == null ? null : map.get("faultSite"));
-                map2.put("BUSSINESSCONTENT", map.get("complaintDesc") == null ? null : map.get("complaintDesc"));
-                map2.put("SENDTIME", map.get("mainCustomerSerTime") == null ? null : map.get("mainCustomerSerTime").toString().substring(0, 19));
-
-               //5
-                map2.put("PROPERTY", map.get("mainPlaceCountry") == null ? null : map.get("mainPlaceCountry"));
-                map2.put("LONGITUDE",lng);
-                map2.put("LATITUDE", lat);
-                map2.put("UE_X", lng);
-                map2.put("UE_Y", lat);
-                //5
-                map2.put("UE_ADDRESS",sAddree);
-                map2.put("UE_PROPERTY",sProperty);
-                map2.put("UE_DATE",map.get("complaintTime")==null?null:map.get("complaintTime").toString());
-                map2.put("COMPLAINT_LEVEL", map.get("customLevel") == null ? null : getLevel(map.get("customLevel").toString()));
-                map2.put("STATE", "1");
-                //2
-                map2.put("ORDER_SOURCE", "4");
-                map2.put("COMPLIANT_LOCATE_TYPE", "3");
-
-
-                //       拆分业务类型字段
-                String[] busType = map.get("title").toString().split("→");
-
-                log.info("业务类型：" + map.get("title").toString());
-                String voice1;
-                if (busType.length < 5) {
-                    voice1 = busType[busType.length - 1];//如果第5位没有，则拿最后一个做
-                } else {
-                    voice1 = busType[5];
-                }
-
-                String voice2;
-                if (voice1.indexOf("通") != -1) {
-                    voice2 = "语音通信";
-                } else if (voice1 == "信号不稳定" || voice1.indexOf("区域") != -1) {
-                    voice2 = "基础通信";
-                } else {
-                    voice2 = "数据通信";
-                }
-                //10
-                map2.put("VOICE_DATA_CLASSIFY", voice2);
-                map2.put("BUSINESS_CLASSIFY", busType.length>2 ? busType[2] : null);
-                map2.put("PROBLEM_CLASSIFY", busType.length>3  ? busType[3] :null );
-                map2.put("PROBLEM_DETAIL", busType.length < 5 ? null : busType[busType.length - 1]);
-                map2.put("ORDER_ACCEPT_LIMIT_TIME", map.get("sheetCompleteLimit") == null ? null : map.get("sheetCompleteLimit").toString().substring(0, 19));
-
-                map2.put("CCH_DEAL_TIME", map.get("mainFaultCchTime") == null ? null : map.get("mainFaultCchTime").toString().substring(0, 19));
-                map2.put("LOCATION_SUGGEST_ONE", map.get("mainFaultCchTypeOne") == null ? null : map.get("mainFaultCchTypeOne"));
-                map2.put("IF_BIG_AREA_COMPLAINT", map.get("isWideComplaint") == null ? null : map.get("isWideComplaint"));
-                map2.put("EOMS_ORDERNUM", map.get("sheetId") == null ? null : map.get("sheetId"));
-                map2.put("FOLLOWER", map.get("operateUser") == null ? null : map.get("operateUser"));
-
-                tempList2.add(map2);
-
-                System.out.println(map2);
-                log.info("插入字段：" + map2);
-
-                resposeMsg += "Message(" + msgId + ") Accpet Success \n";
+            if(chhUrl!=null){
+                getFtpMsg(chhUrl.replace("\n", ""),null);
             }
-
-            boolean res1 = JdbcServer.inserts(insertLogSql, tempList);
-            boolean res2 = JdbcServer.inserts(insertComSql, tempList2);
-
-            log.info(resposeMsg);
-
             return "0";
         } catch (Exception e) {
             log.error("*******************************报文错误：\n", e);
             return "error";
         }
+    }
+
+
+    public void getEmosComMsg(String sendSheet){
+       try {
+           //解析报文
+           List<Map<String, Object>> listTotal = XmlUtil.xmlElementsList(sendSheet.replace("\n", ""));
+           log.info("报文解析开始。。。。。");
+           String resposeMsg = "";
+           if (listTotal.size() == 0) {
+               resposeMsg = "Message Exception";
+               log.error("***********************报文异常，无法正常解析***********************");
+               return ;
+           }
+
+
+           //插入日志记录
+           String insertLogSql = " INSERT INTO AXIS_MESSAGE_LOG (MESSAGE_TYPE,CITY,VERSION_DATE,MESSAGE_ID,ACCEPT_TIME,MESSAGE_DETAIL ) " +
+                   "values(?,?,to_date(?,'yyyy-mm-dd'),?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?) ";
+
+           LinkedList tempList = new LinkedList<>();
+
+
+           String insertComSql = "insert into P_LTE_PARMETER_COMPLAINT(" +
+                   "CITY_CODE,CITY,VERSION_DATE,ORDERNUM,BUSINESSTYPE,ORDER_BENCH," +
+                   "PHONENUM,COMPLAINTTYPE2,COMPLIANTPLACE,BUSSINESSCONTENT,SENDTIME," +
+                   "PROPERTY,LONGITUDE,LATITUDE,UE_X,UE_Y,UE_ADDRESS,UE_PROPERTY,UE_DATE,COMPLAINT_LEVEL,STATE,ORDER_SOURCE," +
+                   "COMPLIANT_LOCATE_TYPE,VOICE_DATA_CLASSIFY,BUSINESS_CLASSIFY,PROBLEM_CLASSIFY,PROBLEM_DETAIL," +
+                   "ORDER_ACCEPT_LIMIT_TIME,CCH_DEAL_TIME,LOCATION_SUGGEST_ONE,IF_BIG_AREA_COMPLAINT,EOMS_ORDERNUM,FOLLOWER," +
+                   "CUSTOMER_NAME,TERMINAL_DESCRIPTION,TD_SUPPORTED,ANALYSIS_CONDITION,HOME_SUBSCRIBER,COMPLAIN_AREA,\n" +
+                   "REPEATED_COMPLAINTS,COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5)" +
+                   " values(" +
+                   "?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?," +//6
+                   "?,?,?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss')," +//5
+                   "?,?,?,?,?,?,?,?,?,?,?," +//11
+                   "?,?,?,?,?," +//5
+                   "to_date(?,'yyyy-mm-dd hh24:mi:ss'),to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?,?," +//6
+                   "?,?,?,?,?, " +//5
+                   "?,?,?,?,?,?) ";//6
+
+           LinkedList tempList2 = new LinkedList<>();
+           log.info("遍历报文。。。。。");
+
+           for (Map<String, Object> map : listTotal) {
+               //       获取时间
+               SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+               String time = sf.format(new Date());
+
+               String orderType = "工单";
+               //地市
+               String city = map.get("mainComplaintPlace") == null ? null : map.get("mainComplaintPlace").toString();
+               //报文ID（工单号）
+               String msgId = map.get("crmSheetId") == null ? null : map.get("crmSheetId").toString();
+
+
+               //检查工单是否存在
+               String checkSql = "select ordernum from P_LTE_PARMETER_COMPLAINT where ordernum='" + msgId + "'";
+
+               ResultSet rs = JdbcServer.executeStatement(checkSql);
+
+               while (rs.next()) {
+                   if (rs.getString(1) == null) {
+                       log.info("报文工单不存在：" + msgId + ",执行下一步");
+                   } else {
+                       log.info("报文工单已存在：" + msgId + ",终止执行下一步");
+                       orderType = "重复工单";
+                   }
+               }
+
+               LinkedHashMap<String, Object> map1 = new LinkedHashMap<>();
+               map1.put("MESSAGE_TYPE", orderType);
+               map1.put("CITY", city);
+               map1.put("VERSION_DATE", time.substring(0, 10));
+               map1.put("MESSAGE_ID", msgId);
+               map1.put("ACCEPT_TIME", time);
+               map1.put("MESSAGE_DETAIL", map.toString());
+               tempList.add(map1);
+
+               if ("重复工单".equals(orderType)) {
+                   resposeMsg += msgId + " order repeat \n";
+                   continue;
+               }
+
+
+
+               String cityCode = null;
+               String checkCityCode = "select CITY_CODE from department_level where CITY_NAME='" + city + "' and rownum=1  ";
+               ResultSet rs2 = JdbcServer.executeStatement(checkCityCode);
+               while (rs2.next()) {
+                   cityCode = rs2.getString(1);
+               }
+
+               String lat = null;
+               String lng = null;
+
+               String sAddree=null;
+               String sProperty=null;
+               log.info("开始获取经纬度。。。。");
+               List<WebDeCoding> list = MapUtil.getBaiDuPoint(map.get("faultSite").toString(), city, null);
+
+               if (list != null && list.size() != 0 && list.get(0).getPoint() != null) {
+                   WebDeCoding web = list.get(0);
+                   BaiduPoint point = PositionUtil.bd09_To_BaiduPoint84(web.getPoint().getLat(), web.getPoint().getLng());
+                   lat = String.valueOf(point.getLat());
+                   lng = String.valueOf(point.getLng());
+                   sAddree=web.getAddr();
+
+                   //获取经纬度
+                   String checkProprtysql = "select DEPT_NAME From department\n" +
+                           "where instr('"+web.getArea()+"',REGION_NAME)>0\n" +
+                           "and PARENT_DEPT_CODE!='YUNNAN' ";
+                   ResultSet rs3 = JdbcServer.executeStatement(checkProprtysql);
+                   while (rs3.next()) {
+                       sProperty = rs3.getString(1);
+                   }
+
+               } else {
+                   log.info("无法获取经纬度");
+               }
+
+               LinkedHashMap<String, Object> map2 = new LinkedHashMap<>();
+               //6
+               map2.put("CITY_CODE", cityCode);
+               map2.put("CITY", city);
+               map2.put("VERSION_DATE", map.get("sendTime") == null ? null : map.get("sendTime").toString().substring(0, 19));
+               map2.put("ORDERNUM", map.get("crmSheetId") == null ? null : map.get("crmSheetId"));
+               map2.put("BUSINESSTYPE", map.get("title") == null ? null : map.get("title"));
+
+               //20200317 jw新增5G判断工单
+               Object tilte=map2.get("BUSINESSTYPE");
+
+               String order_bench="";
+
+               if(tilte!=null  ){
+                   String busType2=tilte.toString().toUpperCase();
+                   if( busType2.indexOf("4G")>=0 || busType2.indexOf("VOLTE")>=0 || busType2.indexOf("CPE")>=0 ||busType2.indexOf("手机上网")>=0 ||
+                           busType2.indexOf("H5")>=0 ||busType2.indexOf("语音通话")>=0 ||busType2.indexOf("跨网协同")>=0 ||busType2.indexOf("已预告警类网络故障")>=0 ||
+                           busType2.indexOf("升级投诉组专用")>=0 ){
+                       order_bench="LTE投诉";
+                   }
+                   else if(busType2.indexOf("5G")>=0){
+                       order_bench="5G投诉";
+                   }else if (busType2.indexOf("2、3G")>=0 || busType2.indexOf("2G")>=0 || busType2.indexOf("GPRS")>=0){
+                       order_bench="2G投诉";
+                   }
+               }
+               map2.put("ORDER_BENCH",order_bench);
+
+
+               //5
+               map2.put("PHONENUM", map.get("complaintNum") == null ? null : map.get("complaintNum"));
+               map2.put("COMPLAINTTYPE2", map.get("complaintType6") == null ? null : map.get("complaintType6"));
+               map2.put("COMPLIANTPLACE", map.get("faultSite") == null ? null : map.get("faultSite"));
+               map2.put("BUSSINESSCONTENT", map.get("complaintDesc") == null ? null : map.get("complaintDesc"));
+               map2.put("SENDTIME", map.get("mainCustomerSerTime") == null ? null : map.get("mainCustomerSerTime").toString().substring(0, 19));
+
+               //5
+               map2.put("PROPERTY", map.get("mainPlaceCountry") == null ? null : map.get("mainPlaceCountry"));
+               map2.put("LONGITUDE",lng);
+               map2.put("LATITUDE", lat);
+               map2.put("UE_X", lng);
+               map2.put("UE_Y", lat);
+               //5
+               map2.put("UE_ADDRESS",sAddree);
+               map2.put("UE_PROPERTY",sProperty);
+               map2.put("UE_DATE",map.get("complaintTime")==null?null:map.get("complaintTime").toString());
+               map2.put("COMPLAINT_LEVEL", map.get("customLevel") == null ? null : getLevel(map.get("customLevel").toString()));
+               map2.put("STATE", "1");
+               //2
+               map2.put("ORDER_SOURCE", "4");
+               map2.put("COMPLIANT_LOCATE_TYPE", "3");
+
+               //       拆分业务类型字段
+               String[] busType = map.get("title").toString().split("→");
+
+               log.info("业务类型：" + map.get("title").toString());
+               String voice1;
+               if (busType.length < 5) {
+                   voice1 = busType[busType.length - 1];//如果第5位没有，则拿最后一个做
+               } else {
+                   voice1 = busType[5];
+               }
+
+               String voice2;
+               if (voice1.indexOf("通") != -1) {
+                   voice2 = "语音通信";
+               } else if (voice1 == "信号不稳定" || voice1.indexOf("区域") != -1) {
+                   voice2 = "基础通信";
+               } else {
+                   voice2 = "数据通信";
+               }
+               //10
+               map2.put("VOICE_DATA_CLASSIFY", voice2);
+               map2.put("BUSINESS_CLASSIFY", busType.length>2 ? busType[2] : null);
+               map2.put("PROBLEM_CLASSIFY", busType.length>3  ? busType[3] :null );
+               map2.put("PROBLEM_DETAIL", busType.length < 5 ? null : busType[busType.length - 1]);
+               map2.put("ORDER_ACCEPT_LIMIT_TIME", map.get("sheetCompleteLimit") == null ? null : map.get("sheetCompleteLimit").toString().substring(0, 19));
+
+               map2.put("CCH_DEAL_TIME", map.get("mainFaultCchTime") == null ? null : map.get("mainFaultCchTime").toString().substring(0, 19));
+               map2.put("LOCATION_SUGGEST_ONE", map.get("mainFaultCchTypeOne") == null ? null : map.get("mainFaultCchTypeOne"));
+               map2.put("IF_BIG_AREA_COMPLAINT", map.get("isWideComplaint") == null ? null : map.get("isWideComplaint"));
+               map2.put("EOMS_ORDERNUM", map.get("sheetId") == null ? null : map.get("sheetId"));
+               map2.put("FOLLOWER", map.get("operateUser") == null ? null : map.get("operateUser"));
+
+
+               //新增字段20200602
+               map2.put("CUSTOMER_NAME", map.get("customerName")==null?null:map.get("customerName").toString());
+               map2.put("TERMINAL_DESCRIPTION", map.get("terminalType")==null?null:map.get("terminalType").toString());
+               map2.put("TD_SUPPORTED", map.get("mainIfTD")==null?null:map.get("mainIfTD").toString());
+               map2.put("ANALYSIS_CONDITION", map.get("preDealResult")==null?null:map.get("preDealResult").toString());
+               map2.put("HOME_SUBSCRIBER", map.get("customAttribution")==null?null:map.get("customAttribution").toString());
+               map2.put("COMPLAIN_AREA", map.get("complaintAdd")==null?null:map.get("complaintAdd").toString());
+
+
+               map2.put("REPEATED_COMPLAINTS", map.get("repeatComplaintTimes")==null?null:map.get("repeatComplaintTimes").toString());
+               map2.put("COMPLAIN_SUGGESTION1", map.get("mainFaultCchTypeOne")==null?null:map.get("mainFaultCchTypeOne").toString());
+               map2.put("COMPLAIN_SUGGESTION2", map.get("mainFaultCchTypeTwo")==null?null:map.get("mainFaultCchTypeTwo").toString());
+               map2.put("COMPLAIN_SUGGESTION3", map.get("mainFaultCchTypeThree")==null?null:map.get("mainFaultCchTypeThree").toString());
+               map2.put("COMPLAIN_SUGGESTION4", map.get("mainFaultCchTypeFour")==null?null:map.get("mainFaultCchTypeFour").toString());
+               map2.put("COMPLAIN_SUGGESTION5", map.get("mainFaultCchTypeFive")==null?null:map.get("mainFaultCchTypeFive").toString());
+
+
+               tempList2.add(map2);
+
+               System.out.println(map2);
+               log.info("插入字段：" + map2);
+
+               resposeMsg += "Message(" + msgId + ") Accpet Success \n";
+           }
+
+           boolean res1 = JdbcServer.inserts(insertLogSql, tempList);
+           boolean res2 = JdbcServer.inserts(insertComSql, tempList2);
+
+           log.info(resposeMsg);
+       }
+       catch (Exception e) {
+        log.error("*******************************工单报文接收错误：",e);
+       }
     }
 
     public String getFtpMsg(String sendSheet, String orderNum) {
@@ -355,9 +405,7 @@ public class ThreadRun  extends Thread {
                     Map<String, Object> map2 = new LinkedHashMap<>();
 
                     map2.put("VERSION_DATE", time.substring(0, 10));
-//                    orderNum
-//                    map2.put("ORDERNUM", listTotal.get(i).get(0) == null ? null : listTotal.get(i).get(0));
-                    map2.put("ORDERNUM", orderNum);
+                    map2.put("ORDERNUM", orderNum==null?null:orderNum);
                     map2.put("START_TIME", listTotal.get(i).get(1) == null ? null : listTotal.get(i).get(1).toString().substring(0, 19));
                     map2.put("END_TIME", listTotal.get(i).get(2) == null ? null : listTotal.get(i).get(2).toString().substring(0, 19));
                     map2.put("FLOW_TYPE", listTotal.get(i).get(3) == null ? null : listTotal.get(i).get(3));
@@ -400,8 +448,8 @@ public class ThreadRun  extends Thread {
                 resposeMsg += fileName + " 文件入库完成 \n";
 
             }
-            boolean res1 = JdbcServer.inserts(insertLogSql, tempList);
-            boolean res2 = JdbcServer.inserts(insertChhSql, tempList2);
+             JdbcServer.inserts(insertLogSql, tempList);
+             JdbcServer.inserts(insertChhSql, tempList2);
             log.info(resposeMsg);
             return resposeMsg;
         } catch (Exception e) {
@@ -416,7 +464,6 @@ public class ThreadRun  extends Thread {
             log.info("任务完成，删除本地ftp文件");
         }
     }
-
 
     public String getLevel(String strLevle) {
         if (strLevle == null) {

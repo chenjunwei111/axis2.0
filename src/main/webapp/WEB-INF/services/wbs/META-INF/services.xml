@@ -21,5 +21,9 @@
         <operation name="turnAnalyReport">
             <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
         </operation>
+
+        <operation name="turnAnalyReport2">
+            <messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+        </operation>
     </service>
 </serviceGroup>
