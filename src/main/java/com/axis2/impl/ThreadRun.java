@@ -26,7 +26,6 @@ public class ThreadRun  extends Thread {
     }
 
 
-
     @Override
     public void run(){
         getComMsg(sendSheet,chhUrl);
