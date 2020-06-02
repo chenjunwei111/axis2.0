@@ -2,7 +2,6 @@ package com.axis2.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.axis2.impl.NsnServiceImpl;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -20,7 +19,7 @@ import java.util.LinkedHashMap;
 * @Date 14:22 2020/6/2
 **/
 public class OracleUtil {
-    private static final Logger log = Logger.getLogger(NsnServiceImpl.class.getClass());
+    private static final Logger log = Logger.getLogger(OracleUtil.class.getClass());
     // 第一次透传数据查询并写入到json对象
 
     public JSONArray  nsnTurnAnalyReport() {
@@ -131,6 +130,7 @@ public class OracleUtil {
             return array;
 
         } catch (SQLException e) {
+            log.error("******************封装预分析结果数据错误：",e);
             e.printStackTrace();
         } finally {
             jdbcUtil.release(conn, pstmt, rs);
@@ -163,8 +163,9 @@ public class OracleUtil {
         try{
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            System.out.println("大数据平台推送数据插入底层数据库成功");
+//            System.out.println("大数据平台推送数据插入底层数据库成功");
         } catch (SQLException e) {
+            log.error("******************存储大数据平台返回结果 错误：",e);
             e.printStackTrace();
         } finally {
             jdbcUtil.release(conn,pstmt,rs);
@@ -173,21 +174,22 @@ public class OracleUtil {
     //大数据平台返回数据接收到一个集合里面并且返回到一个JSONobject里面来
 
     public static String NsnSecondSendData(String ResponseString){
-        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(ResponseString.trim());
-        //data
-        String ResponseStringRestore=jsonObject.get("data").toString();
-        net.sf.json.JSONObject DataRestore = net.sf.json.JSONObject.fromObject(ResponseStringRestore.trim());
+        try {
+            net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(ResponseString.trim());
+            //data
+            String ResponseStringRestore=jsonObject.get("data").toString();
+            net.sf.json.JSONObject DataRestore = net.sf.json.JSONObject.fromObject(ResponseStringRestore.trim());
 
-        //创建一个JsonObject保存第二次要传送的数据
-        String orderNo=DataRestore.getString("orderNo");
-        String procInstId=DataRestore.getString("procInstId");
-        String form_ins_main=DataRestore.getString("formBasicData");
+            //创建一个JsonObject保存第二次要传送的数据
+            String orderNo=DataRestore.getString("orderNo");
+            String procInstId=DataRestore.getString("procInstId");
+            String form_ins_main=DataRestore.getString("formBasicData");
 
-        //关键字段传入到json对象并返回
-        JSONObject jo=new JSONObject(new LinkedHashMap());
-        JSONArray ja=new JSONArray();
-        JSONArray form_ins_sub = new JSONArray() ;
-        JSONObject form_his = new JSONObject(new LinkedHashMap()) ;
+            //关键字段传入到json对象并返回
+            JSONObject jo=new JSONObject(new LinkedHashMap());
+            JSONArray ja=new JSONArray();
+            JSONArray form_ins_sub = new JSONArray() ;
+            JSONObject form_his = new JSONObject(new LinkedHashMap()) ;
             form_his.put("create_time","");
             form_his.put("result","提交");
             form_his.put("comment","");
@@ -199,25 +201,32 @@ public class OracleUtil {
 //            form_attachments.put("create_time","");
 //            form_attachments.put("file_size","");
 //        ja.add(0,form_attachments);
-        jo.put("orderNo",orderNo);
-        jo.put("procInstId",procInstId);
-        jo.put("nodeId","jt54c741580cfd44d880256e8104bd8a43");
-        jo.put("nodeName","EMOS工单生成");
-        jo.put("userId","4079");
-        jo.put("userName","肖体俊");
-        jo.put("form_ins_main",form_ins_main);
-        jo.put("form_ins_sub",form_ins_sub);
-        jo.put("form_his",form_his);
+            jo.put("orderNo",orderNo);
+            jo.put("procInstId",procInstId);
+            jo.put("nodeId","jt54c741580cfd44d880256e8104bd8a43");
+            jo.put("nodeName","EMOS工单生成");
+            jo.put("userId","4079");
+            jo.put("userName","肖体俊");
+            jo.put("form_ins_main",form_ins_main);
+            jo.put("form_ins_sub",form_ins_sub);
+            jo.put("form_his",form_his);
 //        jo.put("form_attachments","");
-        jo.put("form_attachments",ja.clone());
+            jo.put("form_attachments",ja.clone());
 
-        //更新称为最终第二次回传大数据平台的json报文
-        String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(jo.toJSONString());
-        String nsnData_tmp1=jsoninfo_tmp.replace("\"{","{");
-        String nsnDataSecSend=nsnData_tmp1.replace("}\"","}");
-        jsonFormatUtil jfu=new jsonFormatUtil();
-        log.info(jfu.formatJson(nsnDataSecSend));
-        return nsnDataSecSend;
+            //更新称为最终第二次回传大数据平台的json报文
+            String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(jo.toJSONString());
+            String nsnData_tmp1=jsoninfo_tmp.replace("\"{","{");
+            String nsnDataSecSend=nsnData_tmp1.replace("}\"","}");
+            jsonFormatUtil jfu=new jsonFormatUtil();
+            log.info(jfu.formatJson(nsnDataSecSend));
+            return nsnDataSecSend;
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+          log.error("*************大数据平台返回数据封装错误：",e);
+          return null;
+        }
+
     }
 
 }
