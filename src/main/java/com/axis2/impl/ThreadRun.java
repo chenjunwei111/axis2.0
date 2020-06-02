@@ -87,7 +87,8 @@ public class ThreadRun  extends Thread {
                    "COMPLIANT_LOCATE_TYPE,VOICE_DATA_CLASSIFY,BUSINESS_CLASSIFY,PROBLEM_CLASSIFY,PROBLEM_DETAIL," +
                    "ORDER_ACCEPT_LIMIT_TIME,CCH_DEAL_TIME,LOCATION_SUGGEST_ONE,IF_BIG_AREA_COMPLAINT,EOMS_ORDERNUM,FOLLOWER," +
                    "CUSTOMER_NAME,TERMINAL_DESCRIPTION,TD_SUPPORTED,ANALYSIS_CONDITION,HOME_SUBSCRIBER,COMPLAIN_AREA,\n" +
-                   "REPEATED_COMPLAINTS,COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5)" +
+                   "REPEATED_COMPLAINTS,COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5," +
+                   "FAULT_MSISDN )" +
                    " values(" +
                    "?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?," +//6
                    "?,?,?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss')," +//5
@@ -95,7 +96,8 @@ public class ThreadRun  extends Thread {
                    "?,?,?,?,?," +//5
                    "to_date(?,'yyyy-mm-dd hh24:mi:ss'),to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?,?," +//6
                    "?,?,?,?,?, " +//5
-                   "?,?,?,?,?,?) ";//6
+                   "?,?,?,?,?,?," +//6
+                   "?) ";//1
 
            LinkedList tempList2 = new LinkedList<>();
            log.info("遍历报文。。。。。");
@@ -207,7 +209,7 @@ public class ThreadRun  extends Thread {
 
 
                //5
-               map2.put("PHONENUM", map.get("complaintNum") == null ? null : map.get("complaintNum"));
+               map2.put("PHONENUM", map.get("customPhone") == null ? null : map.get("customPhone"));
                map2.put("COMPLAINTTYPE2", map.get("complaintType6") == null ? null : map.get("complaintType6"));
                map2.put("COMPLIANTPLACE", map.get("faultSite") == null ? null : map.get("faultSite"));
                map2.put("BUSSINESSCONTENT", map.get("complaintDesc") == null ? null : map.get("complaintDesc"));
@@ -277,6 +279,9 @@ public class ThreadRun  extends Thread {
                map2.put("COMPLAIN_SUGGESTION3", map.get("mainFaultCchTypeThree")==null?null:map.get("mainFaultCchTypeThree").toString());
                map2.put("COMPLAIN_SUGGESTION4", map.get("mainFaultCchTypeFour")==null?null:map.get("mainFaultCchTypeFour").toString());
                map2.put("COMPLAIN_SUGGESTION5", map.get("mainFaultCchTypeFive")==null?null:map.get("mainFaultCchTypeFive").toString());
+
+               //故障号码
+               map2.put("FAULT_MSISDN", map.get("complaintNum")==null?null:map.get("complaintNum").toString());
 
 
                tempList2.add(map2);
