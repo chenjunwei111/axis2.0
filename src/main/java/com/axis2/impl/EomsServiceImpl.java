@@ -162,7 +162,7 @@ public class EomsServiceImpl implements EomsService {
      * @Date 9:53 2019/9/27
      **/
     @Override
-    public void turnAnalyReport2() {
+    public void turnAnalyReport2(String sendSheet) {
         //调用肖老板的HTTP 请求代码
         NsnServiceImpl.analyTurnToEoms();
     }

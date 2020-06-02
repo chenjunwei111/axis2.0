@@ -61,5 +61,5 @@ public interface EomsService {
      * @Author junwei
      * @Date 9:53 2019/9/27
      **/
-    public void turnAnalyReport2();
+    public void turnAnalyReport2(String sendSheet);
 }
