@@ -35,7 +35,7 @@ public class OracleUtil {
                 + ") a, (select eoms_ordernum as  order_name,businesstype as order_theme,version_date as order_time,order_accept_limit_time as accept_time_limit,\n" +
                 " city,ue_property as region,ue_date as complain_time, customer_name, phonenum as customer_tel, complain_area,bussinesscontent as complain_content,\n" +
                 "if_big_area_complaint as large_area_complain, repeated_complaints,complaint_level as customer_level, home_subscriber,\n" +
-                " complaint_acceptance_province, fault_msisdn,compliantplace as fault_area,city as complain_city,\n" +
+                " complaint_acceptance_province, fault_msisdn,compliantplace as fault_area, complain_city,\n" +
                 "property as  appeal_area,ordernum as crm_ordernum, terminal_description, td_supported, analysis_condition,\n" +
                 "sendtime as customer_dispatch_time, demarcation_analysis_results,cch_deal_time cch_sys_delimit_time,\n" +
                 "complain_suggestion1, complain_suggestion2, complain_suggestion3,\n" +
@@ -123,7 +123,12 @@ public class OracleUtil {
                 jsonObj.put("complain_suggestion3", complain_suggestion3);
                 jsonObj.put("complain_suggestion4", complain_suggestion4);
                 jsonObj.put("complain_suggestion5", complain_suggestion5);
-                jsonObj.put("cgi", cgi);
+                if(cgi!=null){
+                    jsonObj.put("cgi","460-00-"+cgi);
+                }
+                else{
+                    jsonObj.put("cgi",cgi);
+                }
                 jsonObj.put("analysis_result", analysis_result);
                 array.add(jsonObj);
             }

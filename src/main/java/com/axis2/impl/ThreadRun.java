@@ -79,25 +79,24 @@ public class ThreadRun  extends Thread {
 
            LinkedList tempList = new LinkedList<>();
 
-
            String insertComSql = "insert into P_LTE_PARMETER_COMPLAINT(" +
                    "CITY_CODE,CITY,VERSION_DATE,ORDERNUM,BUSINESSTYPE,ORDER_BENCH," +
                    "PHONENUM,COMPLAINTTYPE2,COMPLIANTPLACE,BUSSINESSCONTENT,SENDTIME," +
                    "PROPERTY,LONGITUDE,LATITUDE,UE_X,UE_Y,UE_ADDRESS,UE_PROPERTY,UE_DATE,COMPLAINT_LEVEL,STATE,ORDER_SOURCE," +
                    "COMPLIANT_LOCATE_TYPE,VOICE_DATA_CLASSIFY,BUSINESS_CLASSIFY,PROBLEM_CLASSIFY,PROBLEM_DETAIL," +
                    "ORDER_ACCEPT_LIMIT_TIME,CCH_DEAL_TIME,LOCATION_SUGGEST_ONE,IF_BIG_AREA_COMPLAINT,EOMS_ORDERNUM,FOLLOWER," +
-                   "CUSTOMER_NAME,TERMINAL_DESCRIPTION,TD_SUPPORTED,ANALYSIS_CONDITION,HOME_SUBSCRIBER,COMPLAIN_AREA,\n" +
-                   "REPEATED_COMPLAINTS,COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5," +
-                   "FAULT_MSISDN )" +
+                   "CUSTOMER_NAME,TERMINAL_DESCRIPTION,TD_SUPPORTED,ANALYSIS_CONDITION,HOME_SUBSCRIBER,COMPLAIN_AREA," +
+                   "COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5," +
+                   "FAULT_MSISDN,COMPLAIN_CITY ,DEMARCATION_ANALYSIS_RESULTS,COMPLAINT_ACCEPTANCE_PROVINCE,REPEATED_COMPLAINTS)" +
                    " values(" +
                    "?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?," +//6
                    "?,?,?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss')," +//5
                    "?,?,?,?,?,?,?,?,?,?,?," +//11
                    "?,?,?,?,?," +//5
                    "to_date(?,'yyyy-mm-dd hh24:mi:ss'),to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?,?," +//6
-                   "?,?,?,?,?, " +//5
-                   "?,?,?,?,?,?," +//6
-                   "?) ";//1
+                   "?,?,?,?,?,?, " +//6
+                   "?,?,?,?,?," +//5
+                   "?,?,?,?,?) ";//5
 
            LinkedList tempList2 = new LinkedList<>();
            log.info("遍历报文。。。。。");
@@ -250,13 +249,14 @@ public class ThreadRun  extends Thread {
                } else {
                    voice2 = "数据通信";
                }
-               //10
+               //5
                map2.put("VOICE_DATA_CLASSIFY", voice2);
                map2.put("BUSINESS_CLASSIFY", busType.length>2 ? busType[2] : null);
                map2.put("PROBLEM_CLASSIFY", busType.length>3  ? busType[3] :null );
                map2.put("PROBLEM_DETAIL", busType.length < 5 ? null : busType[busType.length - 1]);
                map2.put("ORDER_ACCEPT_LIMIT_TIME", map.get("sheetCompleteLimit") == null ? null : map.get("sheetCompleteLimit").toString().substring(0, 19));
 
+               //5
                map2.put("CCH_DEAL_TIME", map.get("mainFaultCchTime") == null ? null : map.get("mainFaultCchTime").toString().substring(0, 19));
                map2.put("LOCATION_SUGGEST_ONE", map.get("mainFaultCchTypeOne") == null ? null : map.get("mainFaultCchTypeOne"));
                map2.put("IF_BIG_AREA_COMPLAINT", map.get("isWideComplaint") == null ? null : map.get("isWideComplaint"));
@@ -265,15 +265,15 @@ public class ThreadRun  extends Thread {
 
 
                //新增字段20200602
+               //6
                map2.put("CUSTOMER_NAME", map.get("customerName")==null?null:map.get("customerName").toString());
                map2.put("TERMINAL_DESCRIPTION", map.get("terminalType")==null?null:map.get("terminalType").toString());
                map2.put("TD_SUPPORTED", map.get("mainIfTD")==null?null:map.get("mainIfTD").toString());
                map2.put("ANALYSIS_CONDITION", map.get("preDealResult")==null?null:map.get("preDealResult").toString());
                map2.put("HOME_SUBSCRIBER", map.get("customAttribution")==null?null:map.get("customAttribution").toString());
-               map2.put("COMPLAIN_AREA", map.get("complaintAdd")==null?null:map.get("complaintAdd").toString());
+               map2.put("COMPLAIN_AREA",  getTrueVal(map.get("complaintAdd")));
 
-
-               map2.put("REPEATED_COMPLAINTS", map.get("repeatComplaintTimes")==null?null:map.get("repeatComplaintTimes").toString());
+               //5
                map2.put("COMPLAIN_SUGGESTION1", map.get("mainFaultCchTypeOne")==null?null:map.get("mainFaultCchTypeOne").toString());
                map2.put("COMPLAIN_SUGGESTION2", map.get("mainFaultCchTypeTwo")==null?null:map.get("mainFaultCchTypeTwo").toString());
                map2.put("COMPLAIN_SUGGESTION3", map.get("mainFaultCchTypeThree")==null?null:map.get("mainFaultCchTypeThree").toString());
@@ -282,11 +282,19 @@ public class ThreadRun  extends Thread {
 
                //故障号码
                map2.put("FAULT_MSISDN", map.get("complaintNum")==null?null:map.get("complaintNum").toString());
+               //申告地
+               map2.put("COMPLAIN_CITY",city);
+               //故障定界分析成败结果
+               map2.put("DEMARCATION_ANALYSIS_RESULTS", map.get("mainFaultCchResult")==null?null:map.get("mainFaultCchResult").toString());
+               //投诉处理省份
+               map2.put("COMPLAINT_ACCEPTANCE_PROVINCE", map.get("startDealCity")==null?null:map.get("startDealCity").toString());
+               //重复头次数
+               map2.put("REPEATED_COMPLAINTS",  map.get("repeatComplaintTimes")==null?null:map.get("repeatComplaintTimes").toString());
 
 
                tempList2.add(map2);
 
-               System.out.println(map2);
+//               System.out.println(map2);
                log.info("插入字段：" + map2);
 
                resposeMsg += "Message(" + msgId + ") Accpet Success \n";
@@ -300,6 +308,22 @@ public class ThreadRun  extends Thread {
        catch (Exception e) {
         log.error("*******************************工单报文接收错误：",e);
        }
+    }
+
+
+    /**
+    * Description 过滤为空的数据
+    * @param
+    * @Author junwei
+    * @Date 11:04 2020/6/3
+    **/
+    public String getTrueVal(Object object){
+        if(object!=null){
+            if(object.toString().length()!=0 && !object.toString().equals("") ){
+                return object.toString();
+            }
+        }
+        return  null;
     }
 
     public String getFtpMsg(String sendSheet, String orderNum) {
