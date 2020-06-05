@@ -32,12 +32,14 @@ public class OracleUtil {
                 + "b.complain_suggestion4,b.complain_suggestion5,a.cgi,a.analysis_result from\n"
                 + "(select S.NSN_ID, S.NSN_PARENT_ID,T.CITY, T.PROPERTY,F.工单流水号 crm_ordernum,F.备注1 analysis_result,F.LTE关键小区 cgi \n"
                 + "from TEMP_CP_COMPLAIN_LIST_ORDER_V1 T,FINAL_ANALYSIS_TABLE_V2_1 F,spdb_nsn_area_change S WHERE T.ORDERNUM=F.工单流水号 AND T.PROPERTY=S.SPDB_PROPERTY\n"
-                + ") a, (select eoms_ordernum as  order_name,businesstype as order_theme,version_date as order_time,order_accept_limit_time as accept_time_limit,\n" +
+                + ") a, (select eoms_ordernum as  order_name,businesstype as order_theme, to_char(version_date,'yyyymmdd hh24:mi:ss') as order_time," +
+                "  to_char(order_accept_limit_time,'yyyymmdd hh24:mi:ss') as accept_time_limit,\n" +
                 " city,ue_property as region,ue_date as complain_time, customer_name, phonenum as customer_tel, complain_area,bussinesscontent as complain_content,\n" +
                 "if_big_area_complaint as large_area_complain, repeated_complaints,complaint_level as customer_level, home_subscriber,\n" +
                 " complaint_acceptance_province, fault_msisdn,compliantplace as fault_area, complain_city,\n" +
                 "property as  appeal_area,ordernum as crm_ordernum, terminal_description, td_supported, analysis_condition,\n" +
-                "sendtime as customer_dispatch_time, demarcation_analysis_results,cch_deal_time cch_sys_delimit_time,\n" +
+                " to_char(sendtime,'yyyymmdd hh24:mi:ss') as customer_dispatch_time, demarcation_analysis_results, " +
+                " to_char(cch_deal_time,'yyyymmdd hh24:mi:ss') as cch_sys_delimit_time,\n" +
                 "complain_suggestion1, complain_suggestion2, complain_suggestion3,\n" +
                 "complain_suggestion4, complain_suggestion5\n" +
                 "from p_lte_parmeter_complaint \n"
