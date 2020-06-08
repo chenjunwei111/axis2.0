@@ -226,7 +226,7 @@ public class OracleUtil {
             String nsnData_tmp1=jsoninfo_tmp.replace("\"{","{");
             String nsnDataSecSend=nsnData_tmp1.replace("}\"","}");
             jsonFormatUtil jfu=new jsonFormatUtil();
-            log.info(jfu.formatJson(nsnDataSecSend));
+//            log.info(jfu.formatJson(nsnDataSecSend));
             return nsnDataSecSend;
         }
         catch (Exception e) {
