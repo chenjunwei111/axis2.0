@@ -25,25 +25,37 @@ public class OracleUtil {
     public JSONArray  nsnTurnAnalyReport() {
 
         Connection conn = jdbcUtil.getConnection();
-        String sql = "select  a.NSN_PARENT_ID city,a.NSN_ID region, b.order_name,b.order_theme,b.order_time,b.accept_time_limit,b.complain_time,b.customer_name,b.customer_tel,b.complain_area,\n"
-                + "b.complain_content,b.large_area_complain,b.repeated_complaints,b.customer_level,b.home_subscriber,b.complaint_acceptance_province,b.fault_msisdn,\n"
-                + "b.fault_area,b.complain_city,b.appeal_area,a.crm_ordernum,b.terminal_description,b.td_supported,b.analysis_condition,b.customer_dispatch_time,\n"
-                + "b.demarcation_analysis_results,b.cch_sys_delimit_time,b.complain_suggestion1,b.complain_suggestion2,b.complain_suggestion3,\n"
-                + "b.complain_suggestion4,b.complain_suggestion5,a.cgi,a.analysis_result from\n"
-                + "(select S.NSN_ID, S.NSN_PARENT_ID,T.CITY, T.PROPERTY,F.工单流水号 crm_ordernum,F.备注1 analysis_result,F.LTE关键小区 cgi \n"
-                + "from TEMP_CP_COMPLAIN_LIST_ORDER_V1 T,FINAL_ANALYSIS_TABLE_V2_1 F,spdb_nsn_area_change S WHERE T.ORDERNUM=F.工单流水号 AND T.PROPERTY=S.SPDB_PROPERTY\n"
-                + ") a, (select eoms_ordernum as  order_name,businesstype as order_theme, to_char(version_date,'yyyy-mm-dd hh24:mi:ss') as order_time," +
-                "  to_char(order_accept_limit_time,'yyyy-mm-dd hh24:mi:ss') as accept_time_limit,\n" +
-                " city,ue_property as region,ue_date as complain_time, customer_name, phonenum as customer_tel, complain_area,bussinesscontent as complain_content,\n" +
-                "if_big_area_complaint as large_area_complain, repeated_complaints,complaint_level as customer_level, home_subscriber,\n" +
-                " complaint_acceptance_province, fault_msisdn,compliantplace as fault_area, complain_city,\n" +
-                "property as  appeal_area,ordernum as crm_ordernum, terminal_description, td_supported, analysis_condition,\n" +
-                " to_char(sendtime,'yyyy-mm-dd hh24:mi:ss') as customer_dispatch_time, demarcation_analysis_results, " +
-                " to_char(cch_deal_time,'yyyy-mm-dd hh24:mi:ss') as cch_sys_delimit_time,\n" +
-                "complain_suggestion1, complain_suggestion2, complain_suggestion3,\n" +
-                "complain_suggestion4, complain_suggestion5\n" +
-                "from p_lte_parmeter_complaint \n"
-                + ")b where a.crm_ordernum=b.crm_ordernum";
+        String sql = "select  a.NSN_PARENT_ID city,a.NSN_ID region, b.order_name,a.UE_X,a.UE_Y," +
+                "b.order_theme,b.order_time,b.accept_time_limit,b.complain_time,b.customer_name," +
+                "b.customer_tel,b.complain_area," + "b.complain_content," +
+                "b.large_area_complain,b.repeated_complaints,b.customer_level,b.home_subscriber," +
+                "b.complaint_acceptance_province,b.fault_msisdn," +
+                "b.fault_area,b.complain_city,b.appeal_area,a.crm_ordernum,b.terminal_description," +
+                "b.td_supported,b.analysis_condition,b.customer_dispatch_time," +
+                "b.demarcation_analysis_results,b.cch_sys_delimit_time,b.complain_suggestion1," +
+                "b.complain_suggestion2,b.complain_suggestion3," +
+                "b.complain_suggestion4,b.complain_suggestion5,a.cgi,a.cgi1,a.analysis_result from" +
+                "(select S.NSN_ID, S.NSN_PARENT_ID,T.CITY, T.PROPERTY,F.工单流水号 crm_ordernum,F.备注1 " +
+                "analysis_result,F.LTE关键小区 cgi,substr(COMPARE_SECTOR,0," +
+                "instr(T.COMPARE_SECTOR,'(')-1) cgi1,T.UE_X, T.UE_Y "
+                + "from TEMP_CP_COMPLAIN_LIST_ORDER_V1 T,FINAL_ANALYSIS_TABLE_V2_1 F," +
+                "spdb_nsn_area_change S  WHERE T.ORDERNUM=F.工单流水号 " +
+                "AND T.PROPERTY=S.SPDB_PROPERTY ) a, " +
+                "(select eoms_ordernum as  order_name,businesstype as order_theme, " +
+                "to_char(version_date,'yyyy-mm-dd hh24:mi:ss') as order_time," +
+                "to_char(order_accept_limit_time,'yyyy-mm-dd hh24:mi:ss') as accept_time_limit," +
+                "city,ue_property as region,ue_date as complain_time, customer_name," +
+                " phonenum as customer_tel, complain_area,bussinesscontent as complain_content," +
+                " if_big_area_complaint as large_area_complain, repeated_complaints," +
+                "complaint_level as customer_level, home_subscriber," +
+                "complaint_acceptance_province, fault_msisdn,compliantplace as fault_area, " +
+                "complain_city,property as  appeal_area,ordernum as crm_ordernum, " +
+                "terminal_description, td_supported, analysis_condition," +
+                " to_char(sendtime,'yyyy-mm-dd hh24:mi:ss') as customer_dispatch_time, " +
+                "demarcation_analysis_results,to_char(cch_deal_time,'yyyy-mm-dd hh24:mi:ss') as cch_sys_delimit_time," +
+                "complain_suggestion1, complain_suggestion2, complain_suggestion3, " +
+                "complain_suggestion4, complain_suggestion5 " +
+                "from p_lte_parmeter_complaint )b where a.crm_ordernum=b.crm_ordernum";
 
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -53,7 +65,7 @@ public class OracleUtil {
 //            转换为JSON对象
 //            JSONObject jsonObj = new JSONObject();
             //转换为JSON集合
-            JSONArray array = new JSONArray();
+            JSONArray  array = new JSONArray () ;
 
             while (rs.next()) {
                 JSONObject jsonObj = new JSONObject(new LinkedHashMap());
@@ -91,6 +103,7 @@ public class OracleUtil {
                 String complain_suggestion4 = rs.getString("complain_suggestion4");
                 String complain_suggestion5 = rs.getString("complain_suggestion5");
                 String cgi = rs.getString("cgi");
+                String cgi1 = rs.getString("cgi1");
                 String analysis_result = rs.getString("analysis_result");
                 //放到JSON对象里面
                 jsonObj.put("order_name", order_name);
@@ -130,6 +143,13 @@ public class OracleUtil {
                 }
                 else{
                     jsonObj.put("cgi",cgi);
+                }
+//最近小区补充
+                if(cgi1!=null){
+                    jsonObj.put("cgi1","460-00-"+cgi1);
+                }
+                else{
+                    jsonObj.put("cgi1",cgi1);
                 }
                 jsonObj.put("analysis_result", analysis_result);
                 array.add(jsonObj);
@@ -187,7 +207,7 @@ public class OracleUtil {
             //data
             String ResponseStringRestore=jsonObject.get("data").toString();
             net.sf.json.JSONObject DataRestore = net.sf.json.JSONObject.fromObject(ResponseStringRestore.trim());
-
+//            log.info(new jsonFormatUtil().formatJson(DataRestore.toString()));
             //创建一个JsonObject保存第二次要传送的数据
             String orderNo=DataRestore.getString("orderNo");
             String procInstId=DataRestore.getString("procInstId");
@@ -197,7 +217,7 @@ public class OracleUtil {
             JSONObject jo=new JSONObject(new LinkedHashMap());
             JSONArray ja=new JSONArray();
             JSONArray form_ins_sub = new JSONArray() ;
-            JSONObject form_his = new JSONObject(new LinkedHashMap()) ;
+            JSONObject form_his = new JSONObject(new LinkedHashMap());
             form_his.put("create_time","");
             form_his.put("result","提交");
             form_his.put("comment","");

@@ -1,4 +1,5 @@
 package com.axis2.impl;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.axis2.util.OracleUtil;
@@ -45,12 +46,13 @@ public class NsnServiceImpl {
         for(orderId=0;orderId<complainArray.size();orderId++){
             //获取我们每单需要传送的JSON报文
             String nsnData=complainArray.getString(orderId);
+//            log.info(new jsonFormatUtil().formatJson(nsnData));
             JSONObject obj = new JSONObject();
             obj.put("city",JSONObject.parseObject(nsnData).get("city").toString());
             obj.put("region",JSONObject.parseObject(nsnData).get("region").toString());
             obj.put("formBasicData",nsnData);
             obj.put("formMetaId", "97ece470edfd41eea6c18b9eb38926b7");
-            obj.put("orderName",JSONObject.parseObject(nsnData).get("crm_ordernum").toString());
+            obj.put("orderName",JSONObject.parseObject(nsnData).get("order_name").toString());
             obj.put("procDefKey", "complain10086_v1");
 
             //去除反斜杠进行最终结果输出
@@ -59,7 +61,7 @@ public class NsnServiceImpl {
             //去除JSON子对象多余双引号以后的结果
             String jsoninfo=jsoninfo_tmp1.replace("}\"","}");
             //开始传送报文
-
+//            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
             Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
 
