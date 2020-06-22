@@ -179,11 +179,12 @@ public class OracleUtil {
         String orderNo=DataRestore.getString("orderNo");
         String procInstId=DataRestore.getString("procInstId");
         String orderName=DataRestore.getString("orderName");
+        String crmOrderNum=DataRestore.getJSONObject("formBasicData").getString("crm_ordernum");
         String city=DataRestore.getString("city");
         String region=DataRestore.getString("region");
-
         //入库数据库
-        String sql="INSERT INTO nsn_send_back (orderno,procinstid,ordername,city,region,message,results) VALUES ("+"'"+orderNo+"','"+procInstId+"','"+orderName+"','"+city+"','"+region+"','"+message+"','"+result+"')";
+        String sql="INSERT INTO nsn_send_back (orderno,procinstid,emos_ordernum,crm_ordernum,city,region,message,results) VALUES " +
+                "("+"'"+orderNo+"','"+procInstId+"','"+orderName+"','"+crmOrderNum+"','"+city+"','"+region+"','"+message+"','"+result+"')";
         Connection conn = jdbcUtil.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;

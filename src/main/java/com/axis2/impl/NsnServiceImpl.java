@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.axis2.util.OracleUtil;
 import com.axis2.util.httpUtil;
+import com.axis2.util.jsonFormatUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -60,6 +61,7 @@ public class NsnServiceImpl {
             String jsoninfo_tmp1=jsoninfo_tmp.replace("\"{","{");
             //去除JSON子对象多余双引号以后的结果
             String jsoninfo=jsoninfo_tmp1.replace("}\"","}");
+            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             //开始传送报文
 //            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
