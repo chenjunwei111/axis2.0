@@ -61,7 +61,7 @@ public class httpUtil {
             log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 返回成功内容明细：\n"+ResponseString);
             log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 返回成功，数据入库，" +
                     "内容明细：\n"+ResponseString);
-
+            log2.info("大数据平台开始回传结果入库到数据库留痕");
             OracleUtil.NsnDataPickup(ResponseString);
 
             //大数据平台需要返回的字段保存到集合
