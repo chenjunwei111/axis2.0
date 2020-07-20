@@ -254,10 +254,10 @@ public class ThreadRun  extends Thread {
                map2.put("BUSINESS_CLASSIFY", busType.length>2 ? busType[2] : null);
                map2.put("PROBLEM_CLASSIFY", busType.length>3  ? busType[3] :null );
                map2.put("PROBLEM_DETAIL", busType.length < 5 ? null : busType[busType.length - 1]);
-               map2.put("ORDER_ACCEPT_LIMIT_TIME", map.get("sheetCompleteLimit") == null ? null : map.get("sheetCompleteLimit").toString().substring(0, 19));
+               map2.put("ORDER_ACCEPT_LIMIT_TIME", getTrueVal(map.get("sheetCompleteLimit")) == null ? null : map.get("sheetCompleteLimit").toString().substring(0, 19));
 
                //5
-               map2.put("CCH_DEAL_TIME", map.get("mainFaultCchTime") == null ? null : map.get("mainFaultCchTime").toString().substring(0, 19));
+               map2.put("CCH_DEAL_TIME", getTrueVal(map.get("mainFaultCchTime"))  == null ? null : map.get("mainFaultCchTime").toString().substring(0, 19));
                map2.put("LOCATION_SUGGEST_ONE", map.get("mainFaultCchTypeOne") == null ? null : map.get("mainFaultCchTypeOne"));
                map2.put("IF_BIG_AREA_COMPLAINT", map.get("isWideComplaint") == null ? null : map.get("isWideComplaint"));
                map2.put("EOMS_ORDERNUM", map.get("sheetId") == null ? null : map.get("sheetId"));
