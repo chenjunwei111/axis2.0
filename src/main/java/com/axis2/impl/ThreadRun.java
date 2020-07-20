@@ -87,7 +87,8 @@ public class ThreadRun  extends Thread {
                    "ORDER_ACCEPT_LIMIT_TIME,CCH_DEAL_TIME,LOCATION_SUGGEST_ONE,IF_BIG_AREA_COMPLAINT,EOMS_ORDERNUM,FOLLOWER," +
                    "CUSTOMER_NAME,TERMINAL_DESCRIPTION,TD_SUPPORTED,ANALYSIS_CONDITION,HOME_SUBSCRIBER,COMPLAIN_AREA," +
                    "COMPLAIN_SUGGESTION1,COMPLAIN_SUGGESTION2,COMPLAIN_SUGGESTION3,COMPLAIN_SUGGESTION4,COMPLAIN_SUGGESTION5," +
-                   "FAULT_MSISDN,COMPLAIN_CITY ,DEMARCATION_ANALYSIS_RESULTS,COMPLAINT_ACCEPTANCE_PROVINCE,REPEATED_COMPLAINTS)" +
+                   "FAULT_MSISDN,COMPLAIN_CITY ,DEMARCATION_ANALYSIS_RESULTS,COMPLAINT_ACCEPTANCE_PROVINCE," +
+                   "REPEATED_COMPLAINTS,CUSTOMER_TYPE)" +
                    " values(" +
                    "?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?," +//6
                    "?,?,?,?,to_date(?,'yyyy-mm-dd hh24:mi:ss')," +//5
@@ -96,7 +97,7 @@ public class ThreadRun  extends Thread {
                    "to_date(?,'yyyy-mm-dd hh24:mi:ss'),to_date(?,'yyyy-mm-dd hh24:mi:ss'),?,?,?,?," +//6
                    "?,?,?,?,?,?, " +//6
                    "?,?,?,?,?," +//5
-                   "?,?,?,?,?) ";//5
+                   "?,?,?,?,?,?)";//6
 
            LinkedList tempList2 = new LinkedList<>();
            log.info("遍历报文。。。。。");
@@ -290,8 +291,8 @@ public class ThreadRun  extends Thread {
                map2.put("COMPLAINT_ACCEPTANCE_PROVINCE", map.get("startDealCity")==null?null:map.get("startDealCity").toString());
                //重复头次数
                map2.put("REPEATED_COMPLAINTS",  map.get("repeatComplaintTimes")==null?null:map.get("repeatComplaintTimes").toString());
-
-
+               //客户类型(20200720新增)
+               map2.put("CUSTOMER_TYPE",  map.get("mainReserveTwo")==null?null:map.get("mainReserveTwo").toString());
                tempList2.add(map2);
 
 //               System.out.println(map2);

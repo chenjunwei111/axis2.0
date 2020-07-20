@@ -7,6 +7,7 @@ import com.axis2.util.httpUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
+
 /**
 * Description
 * @param
@@ -62,7 +63,7 @@ public class NsnServiceImpl {
             String jsoninfo=jsoninfo_tmp1.replace("}\"","}");
 //            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             //开始传送报文
-//            log.info(new jsonFormatUtil().formatJson(jsoninfo));
+ //           log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
             Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
 
