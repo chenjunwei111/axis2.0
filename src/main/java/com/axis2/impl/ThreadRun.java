@@ -290,9 +290,9 @@ public class ThreadRun  extends Thread {
                //投诉处理省份
                map2.put("COMPLAINT_ACCEPTANCE_PROVINCE", map.get("startDealCity")==null?null:map.get("startDealCity").toString());
                //重复头次数
-               map2.put("REPEATED_COMPLAINTS",  map.get("repeatComplaintTimes")==null?null:map.get("repeatComplaintTimes").toString());
+               map2.put("REPEATED_COMPLAINTS",  getTrueVal(map.get("repeatComplaintTimes"))==null?null:map.get("repeatComplaintTimes").toString());
                //客户类型(20200720新增)
-               map2.put("CUSTOMER_TYPE",  map.get("mainReserveTwo")==null?null:map.get("mainReserveTwo").toString());
+               map2.put("CUSTOMER_TYPE",  getTrueVal(map.get("mainReserveTwo"))==null?null:map.get("mainReserveTwo").toString());
                tempList2.add(map2);
 
 //               System.out.println(map2);
