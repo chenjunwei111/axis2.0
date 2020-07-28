@@ -233,13 +233,12 @@ public class ThreadRun  extends Thread {
 
                //       拆分业务类型字段
                String[] busType = map.get("title").toString().split("→");
-
                log.info("业务类型：" + map.get("title").toString());
                String voice1;
                if (busType.length < 5) {
                    voice1 = busType[busType.length - 1];//如果第5位没有，则拿最后一个做
                } else {
-                   voice1 = busType[5];
+                   voice1 = busType[4];
                }
 
                String voice2;

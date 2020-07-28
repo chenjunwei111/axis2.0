@@ -58,7 +58,7 @@ public class httpUtil {
                 log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 首次透传无返回结果");
             }
             //数据入库到131
-            log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 返回成功内容明细：\n"+ResponseString);
+            log.info("\n投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 返回成功内容明细：\n"+ResponseString);
             log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+" 返回成功，数据入库，" +
                     "内容明细：\n"+ResponseString);
             log2.info("大数据平台开始回传结果入库到数据库留痕");
