@@ -71,7 +71,7 @@ public class NsnServiceImpl {
                     "发送地址："+url);
 
             log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"\n 回传内容："+jsoninfo);
-            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum);
+            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum,0);
         }
 
     }
