@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.axis2.util.OracleUtil;
 import com.axis2.util.httpUtil;
+import com.axis2.util.jsonFormatUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -63,7 +64,7 @@ public class NsnServiceImpl {
             String jsoninfo=jsoninfo_tmp1.replace("}\"","}");
 //            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             //开始传送报文
- //           log.info(new jsonFormatUtil().formatJson(jsoninfo));
+            log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
             Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
 
@@ -71,7 +72,7 @@ public class NsnServiceImpl {
                     "发送地址："+url);
 
             log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"\n 回传内容："+jsoninfo);
-            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum,0);
+            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum,1,5000);
         }
 
     }
