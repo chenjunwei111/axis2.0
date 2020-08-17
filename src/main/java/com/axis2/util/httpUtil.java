@@ -91,12 +91,13 @@ public class httpUtil {
                 if (map != null && sendNum <= 6) {
                     String result = map.get("result").toString();
                     if (result.equals("false")) {
-                        log.info(orderNum + "首次请求返回失败，尝试第" + sendNum + "次请求");
+                        log.info(orderNum + ",返回内容" +ResponseString+"\n");
+                        log.info(orderNum + ",首次请求返回失败，尝试第" + sendNum + "次请求");
                         sendNum += 1;
                         nextFlag = false;
                         try {
                             Thread.currentThread().sleep(millis);
-                            log.info(orderNum + "尝试等待" + millis / 1000 + "S，发起请求");
+                            log.info(orderNum + "，尝试等待" + millis / 1000 + "S，发起请求");
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
                             log.info(orderNum+"请求返回"+e.toString());
