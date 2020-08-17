@@ -99,7 +99,7 @@ public class httpUtil {
                             log.info(ResponseString + "尝试等待" + millis / 1000 + "S，发起请求");
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
-                            log2.info(e.toString());
+                            log.info(e.toString());
                         }
                         millis += 5000;
                         doHttpPost(xmlInfo, URL, orderNum, eomsNum, sendNum, millis);
