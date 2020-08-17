@@ -168,7 +168,7 @@ public class ThreadRun  extends Thread {
 
                    //获取经纬度
                    String checkProprtysql = "select DEPT_NAME From department\n" +
-                           "where instr('"+web.getArea()+"',REGION_NAME)>0\n" +
+                           "where instr(REGION_NAME,'"+web.getArea()+"')>0\n" +
                            "and PARENT_DEPT_CODE!='YUNNAN' ";
                    ResultSet rs3 = JdbcServer.executeStatement(checkProprtysql);
                    while (rs3.next()) {
@@ -216,6 +216,23 @@ public class ThreadRun  extends Thread {
                map2.put("SENDTIME", map.get("mainCustomerSerTime") == null ? null : map.get("mainCustomerSerTime").toString().substring(0, 19));
 
                //5
+
+               //获取经纬度
+               if(map.get("mainPlaceCountry")!=null){
+                   String checkProprtysql = "select DEPT_NAME From department\n" +
+                           "where instr(REGION_NAME,'"+map.get("mainPlaceCountry").toString().substring(0,2)+"')>0\n" +
+                           "and PARENT_DEPT_CODE!='YUNNAN' ";
+                   ResultSet rs3 = JdbcServer.executeStatement(checkProprtysql);
+                   while (rs3.next()) {
+                    String  emosProperty = rs3.getString(1);
+                    map2.put("PROPERTY",  emosProperty );
+                   }
+
+               }else {
+                   map2.put("PROPERTY",  null );
+               }
+
+
                map2.put("PROPERTY", map.get("mainPlaceCountry") == null ? null : map.get("mainPlaceCountry"));
                map2.put("LONGITUDE",lng);
                map2.put("LATITUDE", lat);
