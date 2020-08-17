@@ -53,7 +53,7 @@ public class SecondSendNsn {
         }
 
         else {
-            log.info("二次传送，开始第" + sendNum + "次请求");
+            log.info("工单号"+orderNum+",开始二次传送，开始第" + sendNum + "次请求");
             byte[] xmlData = nsnDataSecSend.getBytes();
             InputStream instr = null;
             //        java.io.ByteArrayOutputStream out = null;
@@ -99,7 +99,7 @@ public class SecondSendNsn {
                             log.info(ResponseString + "第二次透传尝试等待" + millis / 1000 + "S，发起请求");
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            log2.info(e.toString());
                         }
                         millis += 5000;
                         secDoHttpPost(nsnDataSecSend, urlSec, orderNum, eomsNum, sendNum, millis);

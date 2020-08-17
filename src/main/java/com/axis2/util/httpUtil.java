@@ -58,7 +58,7 @@ public class httpUtil {
         }
         //如果小于六次开始重复回传
         else {
-            log.info("开始第" + sendNum + "次请求");
+            log.info("工单号"+orderNum+":开始第" + sendNum + "次请求");
             byte[] xmlData = xmlInfo.getBytes();
             InputStream instr = null;
             java.io.ByteArrayOutputStream out = null;
@@ -99,7 +99,7 @@ public class httpUtil {
                             log.info(ResponseString + "尝试等待" + millis / 1000 + "S，发起请求");
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            log2.info(e.toString());
                         }
                         millis += 5000;
                         doHttpPost(xmlInfo, URL, orderNum, eomsNum, sendNum, millis);
