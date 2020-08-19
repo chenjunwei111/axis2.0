@@ -22,10 +22,9 @@ public class NsnServiceImpl {
 
     public static String url = "http://10.174.240.17:8082/ease-flow-console-v2/api/open/form/basic/save?userId=1";
 
-    public static void main(String[] args) {
-        analyTurnToEoms();
-    }
-
+//    public static void main(String[] args) {
+//        analyTurnToEoms(sql);
+//    }
 
     /**
     * Description  核心代码
@@ -33,13 +32,13 @@ public class NsnServiceImpl {
     * @Author 肖体俊
     * @Date 15:03 2020/6/2
     **/
-    public static  void  analyTurnToEoms(){
+    public static  void  analyTurnToEoms(String sql){
         log.info("接收到预分析完成消息，开始数据回传EOMS。。。。。。");
         int orderId;
         //规整JSON格式
 //        jsonFormatUtil jfu=new jsonFormatUtil();
         //按照大数据平台JSON对象要求格式进行回传,一单一单回传,先把所有需要回传工单实例化
-        JSONArray complainArray=new OracleUtil().nsnTurnAnalyReport();
+        JSONArray complainArray=new OracleUtil().nsnTurnAnalyReport(sql);
         log.info("本次发送预分析完成工单："+complainArray.size()+"条");
         log.info("开始执行HTTP 发送数据到 EMOS ，\n" +
                 " 概要日志//data1//spdbLogs//axisApp.log \n" +

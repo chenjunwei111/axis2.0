@@ -5,8 +5,7 @@ package com.axis2.service;
 * @Author junwei
 * @Date 16:35 2019/9/26
 **/
-public interface EomsService {
-
+ public interface EomsService {
 
     /**
      * Description 功能接口测试
