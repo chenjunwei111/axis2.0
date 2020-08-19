@@ -115,6 +115,23 @@ public class SecondSendNsn {
             } catch (Exception e) {
                 log.error("*********************发送HTTP请求失败3.0", e);
                 e.printStackTrace();
+                log.info("发送HTTP请求失败3.0,写入后台数据库");
+                String sql = "INSERT INTO nsn_response_failed_detail_table (xmlInfo,URL,orderNum,eomsNum,sendNum,millis,remarks) VALUES " + "(" + "'" + nsnDataSecSend + "','" + urlSec + "','" + orderNum + "','" + eomsNum + "','" + sendNum + "','" + millis +"','" +e.toString() +"')";
+                Connection conn = jdbcUtil.getConnection();
+                PreparedStatement pstmt = null;
+                ResultSet rs = null;
+                //执行sql
+                try {
+                    pstmt = conn.prepareStatement(sql);
+                    rs = pstmt.executeQuery();
+                } catch (SQLException s) {
+                    log.error("******************存储大数据平台返回结果 错误：", s);
+                    s.printStackTrace();
+                } finally {
+                    jdbcUtil.release(conn, pstmt, rs);
+                }
+                e.printStackTrace();
+
                 return "0";
             } finally {
                 try {
