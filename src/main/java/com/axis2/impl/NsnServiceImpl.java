@@ -22,9 +22,6 @@ public class NsnServiceImpl {
 
     public static String url = "http://10.174.240.17:8082/ease-flow-console-v2/api/open/form/basic/save?userId=1";
 
-//    public static void main(String[] args) {
-//        analyTurnToEoms(sql);
-//    }
 
     /**
     * Description  核心代码

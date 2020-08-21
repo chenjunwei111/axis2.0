@@ -3,9 +3,12 @@ package com.axis2.impl;
 import com.axis2.service.EomsService;
 import com.axis2.util.ConfigReaderUtils;
 import com.axis2.util.JdbcServer;
+import com.axis2.util.Task;
 import com.axis2.util.XmlUtil;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,7 +19,7 @@ import java.util.*;
  * @Author junwei
  * @Date 16:36 2019/9/26
  **/
-public class EomsServiceImpl implements EomsService {
+public class EomsServiceImpl implements EomsService , ServletContextListener {
 
     private static final Logger log = Logger.getLogger(EomsServiceImpl.class.getClass());
     private static final Logger log2 = Logger.getLogger("FILE2");
@@ -64,8 +67,6 @@ public class EomsServiceImpl implements EomsService {
     @Override
     public String testSpdb(String sendSheet, String chhUrl) {
         try {
-//            System.out.println(sendSheet);
-//            System.out.println(chhUrl);
             log.info(sendSheet);
             log.info(chhUrl);
             String res = "接收数据成功,数据内容：" + sendSheet;
@@ -87,6 +88,12 @@ public class EomsServiceImpl implements EomsService {
     @Override
     public String SheetInfoSer(String sendSheet, String chhUrl) {
         try {
+
+            if(sendSheet==null && chhUrl==null){
+                log.info("\n接收到空的报文信息，返回1");
+                return "1";
+            }
+
             //log日志记录
             log2.info("报文处理：开始接收 ***************");
 
@@ -236,4 +243,17 @@ public class EomsServiceImpl implements EomsService {
 
     }
 
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+
+        log.info("**************************EOMS流转平台启动*************************");
+        Task task=new Task();
+        task.startTask();
+
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
+    }
 }
