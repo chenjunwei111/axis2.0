@@ -13,6 +13,11 @@
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>com.axis2.impl.EomsServiceImpl</listener-class>
+    </listener>
+
 </web-app>
 
 

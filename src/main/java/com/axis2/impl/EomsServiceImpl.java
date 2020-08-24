@@ -245,7 +245,7 @@ public class EomsServiceImpl implements EomsService , ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
+        log.info("**************************EOMS流转平台启动*************************");
         log.info("**************************EOMS流转平台启动*************************");
         Task task=new Task();
         task.startTask();
