@@ -34,7 +34,7 @@ public class httpUtil {
      * @param sendNum 请求次数，用于控制请求失败后，二次请求，首次为0
      * @return 返回信息
      */
-    public static String doHttpPost(String xmlInfo, String URL, Object orderNum, Object eomsNum, int sendNum, long millis) {
+    public static String doHttpPost(String xmlInfo, String URL, Object orderNum, Object eomsNum, int sendNum, long millis,String attachUrl) {
 //        System.out.println("发起的数据:" + xmlInfo);
         //针对大于6次就写入数据库
         if (sendNum > 6) {
@@ -103,7 +103,7 @@ public class httpUtil {
                             log.info(orderNum+"请求返回"+e.toString());
                         }
                         millis += 5000;
-                        doHttpPost(xmlInfo, URL, orderNum, eomsNum, sendNum, millis);
+                        doHttpPost(xmlInfo, URL, orderNum, eomsNum, sendNum, millis,attachUrl);
                     }
                 }
 
@@ -119,7 +119,7 @@ public class httpUtil {
                     //大数据平台需要返回的字段保存到集合
                     log.info("投诉工单号:" + orderNum + "/EOMS工单号" + eomsNum + " 开始二次透传到大数据平台-推送报文制作");
 
-                    String nsnDataSecSend = OracleUtil.NsnSecondSendData(ResponseString);
+                    String nsnDataSecSend = OracleUtil.NsnSecondSendData(ResponseString,attachUrl);
                     String urlSec = "http://10.174.240.17:8082/ease-flow-console-v2/api/open/flow/taskCompleteNotify";
 
                     log.info("投诉工单号:" + orderNum + "/EOMS工单号" + eomsNum + " 开始二次透传到大数据平台-开始推送报文 \n " + "请求地址：" + urlSec);

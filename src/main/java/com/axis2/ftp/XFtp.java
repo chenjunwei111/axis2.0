@@ -358,6 +358,8 @@ public class XFtp {
 					return false;
 				}
 				this.conn.ftp.setFileType(FTP.BINARY_FILE_TYPE);
+				//被动模式连接_20200827
+				this.conn.ftp.enterLocalPassiveMode();
 				fs = new FileInputStream(localFile);
 				if (!this.conn.ftp.storeFile(f.getName(), fs)) {
 					return false;

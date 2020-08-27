@@ -1,6 +1,5 @@
 package com.axis2.util;
 
-import org.apache.axis2.util.URL;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -10,10 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SeqCheckPushUtil {
+
     private static final Logger log = Logger.getLogger(httpUtil.class.getClass());
 
     //"每个工单开始等待5分钟，先去SEQ查找对应的占用小区，如果有就做生成URL作为附件透传"
-    public static void SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
+    public String SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
         String[] csvHeaders={"DAY_ID", "START_TIME", "END_TIME", "MSISDN", "CELL_ID"};
         String csvFilePath="D:\\TEST";
 
@@ -59,10 +59,10 @@ public class SeqCheckPushUtil {
             boolean flagcsv=CsvWriteUtils.createCsvFile(array,csvFilePath,customer_tel.toString(),dayIdRes);
                 if (flagcsv){
                     log.info("检查csv文件存在，开始生成对应url连接");
-                    //String CsvFileName=csvFilePath+"\\"+customer_tel.toString()+".csv";
-                    URL sequrl= new URL("http://10.174.238.10//SpdbShareData//complain//seq_detail//"+dayIdRes+"_"+customer_tel.toString()+".csv");
+                    return "http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString();
                 }else{
                     log.info("检查csv文件不存在，不生成对应url直接进入推送");
+                    return null;
                 }
 
         } catch (SQLException e) {
@@ -71,8 +71,6 @@ public class SeqCheckPushUtil {
         } finally {
             jdbcUtil.release(conn, pstmt, rs);
         }
+        return null;
     }
-
-
-
 }
