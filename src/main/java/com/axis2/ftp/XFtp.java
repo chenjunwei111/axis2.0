@@ -334,6 +334,7 @@ public class XFtp {
 			return false;
 		}
 		if (!this.conn.hasConnected()) {
+			log.info("FTP连接失败，无法正常连接FTP");
 			return false;
 		}
 		FileInputStream fs = null;
@@ -411,8 +412,9 @@ public class XFtp {
 				}
 			}
 		} catch (Exception e) {
-			log.error("************************ftp错误",e);
-			e.printStackTrace();
+
+			log.info("************************ftp错误",e);
+			log.info(e.toString());
 			return false;
 		}
 		return suss;

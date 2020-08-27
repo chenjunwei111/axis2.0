@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 /**
 * Description 线程类
 * @param

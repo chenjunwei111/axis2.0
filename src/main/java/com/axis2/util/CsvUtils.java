@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 /**
 * Description csv文件工具类
 * @Author junwei
@@ -60,7 +59,6 @@ public class CsvUtils {
 
         }
     }
-
 
     public static void main(String[] args) throws IOException {
 

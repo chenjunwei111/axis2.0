@@ -55,10 +55,10 @@ package com.axis2.service;
 
 
     /**
-     * Description 报文返回到益阳平台
+     * Description 传送分析结果给NSN大数据平台
      * @param
-     * @Author junwei
-     * @Date 9:53 2019/9/27
+     * @Author scorpio
+     * @Date 11:37 2020/08/24
      **/
     public void turnAnalyReport2(String sendSheet);
 }
