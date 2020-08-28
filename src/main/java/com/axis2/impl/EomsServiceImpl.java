@@ -33,7 +33,7 @@ public class EomsServiceImpl implements EomsService , ServletContextListener {
         "b.complain_suggestion2,b.complain_suggestion3,b.complain_suggestion4,b.complain_suggestion5," +
         "a.cgi,a.cgi1,a.analysis_result from (SELECT S1.CITY,S1.PROPERTY,S1.CRM_ORDERNUM,S1.ANALYSIS_RESULT," +
         "S.SPDB_PROPERTY,S.NSN_PROPERTY,S.NSN_ID,S.NSN_PARENT_ID,S1.CGI1,S1.CGI,S1.UE_X,S1.UE_Y FROM (" +
-        "select CITY,case when LTE_PROPERTY is null then GSM_PROPERTY END PROPERTY, CRM_ORDERNUM," +
+        "select CITY,case when LTE_PROPERTY is null then GSM_PROPERTY  else LTE_PROPERTY END PROPERTY, CRM_ORDERNUM," +
         " ANALYSIS_RESULT, CGI1, CGI, UE_X, UE_Y from (select a1.CITY,CASE WHEN a1.CITY='大理' and" +
         " a1.PROPERTY='大理古城区' THEN (case when a1.cgi is null then a3.area else a2.area end ) else a1.PROPERTY " +
         "end LTE_PROPERTY,CASE WHEN a1.CITY='大理' and a1.PROPERTY='大理古城区' THEN (case when a1.cgi is null then " +
