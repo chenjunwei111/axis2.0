@@ -1,5 +1,6 @@
 package com.axis2.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -7,13 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class SeqCheckPushUtil {
 
     private static final Logger log = Logger.getLogger(httpUtil.class.getClass());
 
     //"每个工单开始等待5分钟，先去SEQ查找对应的占用小区，如果有就做生成URL作为附件透传"
-    public String SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
+    public JSONObject SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
         String[] csvHeaders={"DAY_ID", "START_TIME", "END_TIME", "MSISDN", "CELL_ID"};
         String csvFilePath="D:\\TEST";
 
@@ -56,10 +58,21 @@ public class SeqCheckPushUtil {
                 array.add(objects);
             }
             log.info("正在查询投诉用户对应的SEQ占用小区，生成csv文件");
-            boolean flagcsv=CsvWriteUtils.createCsvFile(array,csvFilePath,customer_tel.toString(),dayIdRes);
-                if (flagcsv){
+            JSONObject JsonSeqcsv=new CsvWriteUtils().createCsvFile(array,csvFilePath,customer_tel.toString(),dayIdRes);
+                if (JsonSeqcsv.size()!=0){
                     log.info("检查csv文件存在，开始生成对应url连接");
-                    return "http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString();
+                    //JsonSeqcsv.put("url","http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString());
+                    log.info(JsonSeqcsv);
+                    //封装成JSON对象，传回来的JSONOBJECT文件大小/日期/名称重新增加URL封装
+                    JSONObject jo=new JSONObject(new LinkedHashMap());
+                    jo.put("name",JsonSeqcsv.getString("name"));
+                    jo.put("url","http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString());
+                    jo.put("create_time",JsonSeqcsv.getString("create_time"));
+                    jo.put("file_size",JsonSeqcsv.getString("file_size"));
+                    log.info(jo);
+                    //继续把JSON对象封装成JSON集合
+                    return jo;
+                    //return "http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString();
                 }else{
                     log.info("检查csv文件不存在，不生成对应url直接进入推送");
                     return null;

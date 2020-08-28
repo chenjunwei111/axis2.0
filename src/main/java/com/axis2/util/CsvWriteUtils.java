@@ -1,14 +1,17 @@
 package com.axis2.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.axis2.ftp.Connection;
 import com.axis2.ftp.XFtp;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**Created by scorpio on 2020/08/26
@@ -18,7 +21,7 @@ import java.util.List;
 public class CsvWriteUtils
 {
     private static final Logger log = Logger.getLogger(httpUtil.class.getClass());
-    public static boolean createCsvFile(List rows, String filePath, String fileName,String dayId)
+    public  JSONObject createCsvFile(List rows, String filePath, String fileName,String dayId)
     {
         //标记文件生成是否成功；
         boolean flag = true;
@@ -101,6 +104,37 @@ public class CsvWriteUtils
                 fileOutputStream.newLine();     //换行，创建一个新行；
             }
             fileOutputStream.flush();
+
+            //从本地把文件上传到FTP服务器(131)
+            log.info("测试把文件从本地上传到服务器131");
+            XFtp ftp= new XFtp("10.174.238.10","spdb","accountPassw0rd",49161);
+            conn = ftp.createConnection();
+            conn.openxFtpChannel(Connection.xftpChannel.FTP);
+
+            boolean res = conn.connectServer();
+            log.info("连接FTP完成。。(" + res + ")");
+
+            boolean ftpIsSuc=ftp.pushFile("//xiaotijun//complain//seq_detail//",fullPath);
+            if(ftpIsSuc==true){
+                //创建一个集合存储需要的数据
+                JSONObject al=new JSONObject(new LinkedHashMap());
+                //获取文件生成日期
+                long FileCreateTime=file.lastModified();
+                Date date = new Date(FileCreateTime);
+                //获取文件大小
+                DecimalFormat df = new DecimalFormat("#.00");
+                long fileS = file.length();
+                String size = df.format((double) fileS / 1024) + "KB";
+                log.info("CSV文件传输到131服务器正常");
+                al.put("name","SEQ占用小区CSV文件");
+                al.put("create_time",sdf.format(date));
+                al.put("file_size",size);
+                return al;
+            }else{
+                log.info("CSV文件传输到131服务器失败");
+                return null;
+            }
+
         }catch (Exception e)
         {
             flag = false;
@@ -108,28 +142,12 @@ public class CsvWriteUtils
         }finally {
             try{
                 fileOutputStream.close();
+
             }catch (IOException e)
             {
                 e.printStackTrace();
             }
         }
-        //从本地把文件上传到FTP服务器(131)
-        log.info("测试把文件从本地上传到服务器131");
-        XFtp ftp= new XFtp("10.174.238.10","spdb","accountPassw0rd",49161);
-        conn = ftp.createConnection();
-
-        conn.openxFtpChannel(Connection.xftpChannel.FTP);
-
-        boolean res = conn.connectServer();
-        log.info("连接FTP完成。。(" + res + ")");
-
-        boolean ftpIsSuc=ftp.pushFile("//xiaotijun//complain//seq_detail//",fullPath);
-        if(ftpIsSuc==true){
-            log.info("CSV文件传输到131服务器正常");
-            return true;
-        }else{
-            log.info("CSV文件传输到131服务器失败");
-            return false;
-        }
+        return null;
     }
 }

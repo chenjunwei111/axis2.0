@@ -1,6 +1,7 @@
 package com.axis2.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.IOUtils;
 
@@ -34,7 +35,7 @@ public class httpUtil {
      * @param sendNum 请求次数，用于控制请求失败后，二次请求，首次为0
      * @return 返回信息
      */
-    public static String doHttpPost(String xmlInfo, String URL, Object orderNum, Object eomsNum, int sendNum, long millis,String attachUrl) {
+    public static String doHttpPost(String xmlInfo, String URL, Object orderNum, Object eomsNum, int sendNum, long millis,JSONObject attachUrl) {
 //        System.out.println("发起的数据:" + xmlInfo);
         //针对大于6次就写入数据库
         if (sendNum > 6) {

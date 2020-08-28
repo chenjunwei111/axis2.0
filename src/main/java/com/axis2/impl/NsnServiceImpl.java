@@ -72,7 +72,7 @@ public class NsnServiceImpl {
             Object fault_msisdn= JSONObject.parseObject(nsnData).get("fault_msisdn");
 
             log.info("开始检查投诉号码对应的SEQ占用信息，生成csv文件");
-            String attachUrl=new SeqCheckPushUtil().SeqCellCheck(orderNum,customer_tel,fault_msisdn);
+            JSONObject attachUrl=new SeqCheckPushUtil().SeqCellCheck(orderNum,customer_tel,fault_msisdn);
 
             log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"  数据封装完成，开始发送HTTP请求\n " +
                     "发送地址："+url);
