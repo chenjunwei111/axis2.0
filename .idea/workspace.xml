@@ -7,18 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8db3a472-4332-4581-aeab-0858ed68626f" name="Default Changelist" comment="axis2.0_20200817(线程异常增加了捕获)">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_javacsv_javacsv_2_0.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/axis2/ftp/XFtp.class" afterPath="$PROJECT_DIR$/target/classes/com/axis2/ftp/XFtp.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/axis2_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/axis2_war_exploded.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/axis2.iml" afterPath="$PROJECT_DIR$/axis2.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/impl/EomsServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/impl/EomsServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/impl/NsnServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/impl/NsnServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/util/CsvWriteUtils.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/util/CsvWriteUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/util/OracleUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/util/OracleUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/util/SeqCheckPushUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/util/SeqCheckPushUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/util/httpUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/util/httpUtil.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/log4j.properties" afterPath="$PROJECT_DIR$/target/classes/log4j.properties" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -847,7 +837,7 @@
       <workItem from="1598405086876" duration="25920000" />
       <workItem from="1598491943309" duration="19446000" />
       <workItem from="1598518976661" duration="4796000" />
-      <workItem from="1598577163143" duration="9525000" />
+      <workItem from="1598577163143" duration="9582000" />
     </task>
     <task id="LOCAL-00001" summary="axisSpdb 2.0">
       <created>1591709359261</created>
@@ -947,11 +937,18 @@
       <option name="project" value="LOCAL" />
       <updated>1598523761726</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="axis2.0_20200817(线程异常增加了捕获)">
+      <created>1598586923603</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1598586923603</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="427950000" />
+    <option name="totallyTimeSpent" value="428007000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1080,9 +1077,9 @@
     <MESSAGE value="axis2.0_20200817(log存储位置更新了一下)" />
     <MESSAGE value="axis2.0_20200819(增加了HTTP无响应，没传送工单的入库)" />
     <MESSAGE value="axis2.0_20200819(增加了针对没有发送成功的工单自动回传的方法，但是调用的话时间不太确定，暂定晚上12点调用一次可能比较好，后续可能要调整周期)" />
-    <MESSAGE value="axis2.0_20200817(线程异常增加了捕获)" />
     <MESSAGE value="axis2.0_20200827(针对自动回传seq占用小区进行了代码补充，现在还存在的问题是二次回传json附件格式有点问题，需要在做一下调整)" />
-    <option name="LAST_COMMIT_MESSAGE" value="axis2.0_20200827(针对自动回传seq占用小区进行了代码补充，现在还存在的问题是二次回传json附件格式有点问题，需要在做一下调整)" />
+    <MESSAGE value="axis2.0_20200817(线程异常增加了捕获)" />
+    <option name="LAST_COMMIT_MESSAGE" value="axis2.0_20200817(线程异常增加了捕获)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
