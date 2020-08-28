@@ -42,7 +42,7 @@ public class EomsServiceImpl implements EomsService , ServletContextListener {
         "F.LTE关键小区 cgi,substr(COMPARE_SECTOR,0,instr(T.COMPARE_SECTOR,'(')-1) cgi1,T.UE_X, T.UE_Y  from (" +
         "select * from TEMP_CP_COMPLAIN_LIST_ORDER_V1 where ordernum not in(select distinct  CRM_ORDERNUM from " +
         "nsn_send_back))T,FINAL_ANALYSIS_TABLE_V2_1 F  WHERE T.ORDERNUM=F.工单流水号) a1" +
-        "left join (select SECTOR_ID,AREA from p_lte_sector_bak p) a2 on a1.cgi=a2.SECTOR_ID" +
+        " left join (select SECTOR_ID,AREA from p_lte_sector_bak p) a2 on a1.cgi=a2.SECTOR_ID" +
         " left join (select SECTOR_ID,AREA from p_lte_sector_bak p) a3  on a1.CGI1=a3.sector_id " +
         " left join (select lac||'-'||ci as SECTOR_ID,area from p_gsm_sector_bak p) a4 " +
         "on a1.cgi=a4.sector_id left join (select lac||'-'||ci as SECTOR_ID,area from p_gsm_sector_bak p) a5 " +
