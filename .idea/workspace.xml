@@ -837,7 +837,7 @@
       <workItem from="1598405086876" duration="25920000" />
       <workItem from="1598491943309" duration="19446000" />
       <workItem from="1598518976661" duration="4796000" />
-      <workItem from="1598577163143" duration="9582000" />
+      <workItem from="1598577163143" duration="9588000" />
     </task>
     <task id="LOCAL-00001" summary="axisSpdb 2.0">
       <created>1591709359261</created>
@@ -944,11 +944,18 @@
       <option name="project" value="LOCAL" />
       <updated>1598586923603</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="axis2.0_20200817(线程异常增加了捕获)">
+      <created>1598586971052</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1598586971052</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="428007000" />
+    <option name="totallyTimeSpent" value="428013000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
