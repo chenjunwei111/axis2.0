@@ -64,8 +64,7 @@ public class NsnServiceImpl {
             log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
             Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
-            //开始等5分钟检测是不是SEQ推送的占用小区_20200824(SCORPIO)
-            log.info("每个工单开始等待5分钟，先去SEQ查找对应的占用小区，如果有就做生成URL作为附件透传");
+
             //投诉号码
             Object customer_tel= JSONObject.parseObject(nsnData).get("customer_tel");
             //故障号码

@@ -17,7 +17,7 @@ public class SeqCheckPushUtil {
     //"每个工单开始等待5分钟，先去SEQ查找对应的占用小区，如果有就做生成URL作为附件透传"
     public JSONObject SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
         String[] csvHeaders={"DAY_ID", "START_TIME", "END_TIME", "MSISDN", "CELL_ID"};
-        String csvFilePath="D:\\TEST";
+        String csvFilePath="\\data2\\ftp_root\\xiaotijun";
 
         Connection conn = jdbcUtil.getConnection();
         String orderNumRes=orderNum.toString();
@@ -57,12 +57,11 @@ public class SeqCheckPushUtil {
                 Object[] objects = {DAY_ID,START_TIME,END_TIME,MSISDN,CELL_ID};
                 array.add(objects);
             }
-            log.info("正在查询投诉用户对应的SEQ占用小区，生成csv文件");
+            //log.info("正在查询投诉用户对应的SEQ占用小区，生成csv文件");
             JSONObject JsonSeqcsv=new CsvWriteUtils().createCsvFile(array,csvFilePath,customer_tel.toString(),dayIdRes);
-                if (JsonSeqcsv.size()!=0){
+                if (JsonSeqcsv!=null){
                     log.info("检查csv文件存在，开始生成对应url连接");
                     //JsonSeqcsv.put("url","http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString());
-                    log.info(JsonSeqcsv);
                     //封装成JSON对象，传回来的JSONOBJECT文件大小/日期/名称重新增加URL封装
                     JSONObject jo=new JSONObject(new LinkedHashMap());
                     jo.put("name",JsonSeqcsv.getString("name"));
@@ -74,7 +73,7 @@ public class SeqCheckPushUtil {
                     return jo;
                     //return "http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString();
                 }else{
-                    log.info("检查csv文件不存在，不生成对应url直接进入推送");
+                    log.info("检查csv文件不存在，返回空");
                     return null;
                 }
 

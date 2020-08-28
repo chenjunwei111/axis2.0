@@ -104,9 +104,16 @@ public class CsvWriteUtils
                 fileOutputStream.newLine();     //换行，创建一个新行；
             }
             fileOutputStream.flush();
+            //如果是没有查询结果，就把文件删除了
+            long csvFileCheck=file.length();
+            if(csvFileCheck==53){
+                log.info("查询无SEQ小区占用，删除空csv文件");
+                fileOutputStream.close();
+                file.delete();
+            }
 
             //从本地把文件上传到FTP服务器(131)
-            log.info("测试把文件从本地上传到服务器131");
+            log.info("测试把文件从本地上传到服务器");
             XFtp ftp= new XFtp("10.174.238.10","spdb","accountPassw0rd",49161);
             conn = ftp.createConnection();
             conn.openxFtpChannel(Connection.xftpChannel.FTP);
@@ -125,13 +132,16 @@ public class CsvWriteUtils
                 DecimalFormat df = new DecimalFormat("#.00");
                 long fileS = file.length();
                 String size = df.format((double) fileS / 1024) + "KB";
-                log.info("CSV文件传输到131服务器正常");
+                log.info("CSV文件传输到服务器正常");
                 al.put("name","SEQ占用小区CSV文件");
                 al.put("create_time",sdf.format(date));
                 al.put("file_size",size);
+                //用完把本地生成的CSV文件删除了
+                fileOutputStream.close();
+                file.delete();
                 return al;
             }else{
-                log.info("CSV文件传输到131服务器失败");
+                log.info("CSV文件传输到服务器失败");
                 return null;
             }
 

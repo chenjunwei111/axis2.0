@@ -241,9 +241,12 @@ public class OracleUtil {
             jo.put("form_ins_main",form_ins_main);
             jo.put("form_ins_sub",form_ins_sub);
             jo.put("form_his",form_his);
-            ja.add(0,attachUrl);
-            //jo.put("form_attachments",ja.clone());
-            jo.put("form_attachments",ja);
+
+            if(attachUrl!=null) {
+                ja.add(0, attachUrl);
+                jo.put("form_attachments", ja);
+            }else{
+            jo.put("form_attachments",ja.clone());}
 
             //更新称为最终第二次回传大数据平台的json报文
             String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(jo.toJSONString());
