@@ -204,7 +204,7 @@ public class OracleUtil {
     }
     //大数据平台返回数据接收到一个集合里面并且返回到一个JSONobject里面来
 
-    public static String NsnSecondSendData(String ResponseString){
+    public static String NsnSecondSendData(String ResponseString,JSONObject attachUrl){
         try {
             net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(ResponseString.trim());
             //data
@@ -241,15 +241,19 @@ public class OracleUtil {
             jo.put("form_ins_main",form_ins_main);
             jo.put("form_ins_sub",form_ins_sub);
             jo.put("form_his",form_his);
-//        jo.put("form_attachments","");
-            jo.put("form_attachments",ja.clone());
+
+            if(attachUrl!=null) {
+                ja.add(0, attachUrl);
+                jo.put("form_attachments", ja);
+            }else{
+            jo.put("form_attachments",ja.clone());}
 
             //更新称为最终第二次回传大数据平台的json报文
             String jsoninfo_tmp=StringEscapeUtils.unescapeJavaScript(jo.toJSONString());
             String nsnData_tmp1=jsoninfo_tmp.replace("\"{","{");
             String nsnDataSecSend=nsnData_tmp1.replace("}\"","}");
             jsonFormatUtil jfu=new jsonFormatUtil();
-//            log.info(jfu.formatJson(nsnDataSecSend));
+            log.info("第二次封装发送到大数据平台JSON"+jfu.formatJson(nsnDataSecSend));
             return nsnDataSecSend;
         }
         catch (Exception e) {

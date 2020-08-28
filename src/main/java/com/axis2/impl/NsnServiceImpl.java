@@ -64,21 +64,20 @@ public class NsnServiceImpl {
             log.info(new jsonFormatUtil().formatJson(jsoninfo));
             Object orderNum= JSONObject.parseObject(nsnData).get("crm_ordernum");
             Object eomsNum= JSONObject.parseObject(nsnData).get("order_name");
-            //开始等5分钟检测是不是SEQ推送的占用小区_20200824(SCORPIO)
-            log.info("每个工单开始等待5分钟，先去SEQ查找对应的占用小区，如果有就做生成URL作为附件透传");
+
             //投诉号码
             Object customer_tel= JSONObject.parseObject(nsnData).get("customer_tel");
             //故障号码
             Object fault_msisdn= JSONObject.parseObject(nsnData).get("fault_msisdn");
-            log.info("开始检查投诉号码对应的SEQ占用信息，准备生成csv文件");
-            SeqCheckPushUtil.SeqCellCheck(orderNum,customer_tel,fault_msisdn);
 
+            log.info("开始检查投诉号码对应的SEQ占用信息，生成csv文件");
+            JSONObject attachUrl=new SeqCheckPushUtil().SeqCellCheck(orderNum,customer_tel,fault_msisdn);
 
             log.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"  数据封装完成，开始发送HTTP请求\n " +
                     "发送地址："+url);
 
             log2.info("投诉工单号:"+orderNum+"/EOMS工单号"+eomsNum+"\n 回传内容："+jsoninfo);
-            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum,1,5000);
+            httpUtil.doHttpPost(jsoninfo,url,orderNum,eomsNum,1,5000,attachUrl);
         }
 
     }
