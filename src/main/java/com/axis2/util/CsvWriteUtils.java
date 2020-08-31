@@ -104,11 +104,19 @@ public class CsvWriteUtils
                 fileOutputStream.newLine();     //换行，创建一个新行；
             }
             fileOutputStream.flush();
-            //如果是没有查询结果，就把文件删除了
-            long csvFileCheck=file.length();
-            if(csvFileCheck==53){
-                log.info("查询无SEQ小区占用，删除空csv文件");
+            //先把流文件关闭
+            try{
                 fileOutputStream.close();
+
+            }catch (IOException e)
+            {
+                log.info("CSV文件写入后关闭异常，具体原因:"+e.toString());
+            }
+
+            long csvFileCheck =getTotalLines(file);
+            //这个地方要做调整等于53不表明等于空文件
+            if(csvFileCheck==1){
+                log.info("查询无SEQ小区占用，删除空csv文件");
                 file.delete();
             }
 
@@ -117,7 +125,6 @@ public class CsvWriteUtils
             XFtp ftp= new XFtp("10.174.238.10","spdb","accountPassw0rd",49161);
             conn = ftp.createConnection();
             conn.openxFtpChannel(Connection.xftpChannel.FTP);
-
             boolean res = conn.connectServer();
             log.info("连接FTP完成。。(" + res + ")");
 
@@ -136,8 +143,8 @@ public class CsvWriteUtils
                 al.put("name","SEQ占用小区CSV文件");
                 al.put("create_time",sdf.format(date));
                 al.put("file_size",size);
-                //用完把本地生成的CSV文件删除了
-                fileOutputStream.close();
+//                //用完把本地生成的CSV文件删除了
+//                fileOutputStream.close();
                 file.delete();
                 return al;
             }else{
@@ -149,15 +156,21 @@ public class CsvWriteUtils
         {
             flag = false;
             log.info("写入SEQ占用小区到CSV发生异常:"+e.toString());
-        }finally {
-            try{
-                fileOutputStream.close();
-
-            }catch (IOException e)
-            {
-                e.printStackTrace();
-            }
         }
         return null;
+    }
+
+
+    //快速获取文件行数
+    public long getTotalLines(File file) throws IOException {
+        long startTime = System.currentTimeMillis();
+        FileReader in = new FileReader(file);
+        LineNumberReader reader = new LineNumberReader(in);
+        reader.skip(Long.MAX_VALUE);
+        int lines = reader.getLineNumber();
+        reader.close();
+        long endTime = System.currentTimeMillis();
+//        System.out.println("统计文件行数运行时间： " + (endTime - startTime) + "ms");
+        return lines;
     }
 }
