@@ -18,7 +18,7 @@ public class SeqCheckPushUtil {
     public JSONObject SeqCellCheck(Object orderNum,Object customer_tel,Object fault_msisdn){
         String[] csvHeaders={"DAY_ID", "START_TIME", "END_TIME", "MSISDN", "CELL_ID"};
         String csvFilePath="\\data2\\ftp_root\\xiaotijun";
-
+//        String csvFilePath="\\D:\\TEST\\";
         Connection conn = jdbcUtil.getConnection();
         String orderNumRes=orderNum.toString();
         String dayIdRes=orderNum.toString().substring(0,8);
@@ -65,7 +65,7 @@ public class SeqCheckPushUtil {
                     //封装成JSON对象，传回来的JSONOBJECT文件大小/日期/名称重新增加URL封装
                     JSONObject jo=new JSONObject(new LinkedHashMap());
                     jo.put("name",JsonSeqcsv.getString("name"));
-                    jo.put("url","http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString());
+                    jo.put("url","http://10.174.238.10/SpdbShareData/complain/seq_detail/"+dayIdRes+"_"+customer_tel.toString()+".csv");
                     jo.put("create_time",JsonSeqcsv.getString("create_time"));
                     jo.put("file_size",JsonSeqcsv.getString("file_size"));
                     log.info(jo);
