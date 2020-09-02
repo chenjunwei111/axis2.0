@@ -1,5 +1,8 @@
 package com.axis2.util;
 
+import com.axis2.impl.EomsServiceImpl;
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -11,6 +14,8 @@ import java.util.ArrayList;
  */
 
 public class UtilFile {
+
+	private static final Logger log = Logger.getLogger(EomsServiceImpl.class.getClass());
 
 	/**
 	 * 获取文件名 D:/testdata/201710091030.zip ==>> 201710091030.zip
@@ -163,9 +168,9 @@ public class UtilFile {
 					if (!delfile.isDirectory()) {
 						boolean res=delfile.delete();
 						if(!res){
-							System.out.println(fileName+"\n删除失败");
+							log.info(fileName+"\n删除失败");
 						}else{
-							System.out.println(fileName+"\n删除成功");
+							log.error(fileName+"\n删除成功");
 						}
 					} else if (delfile.isDirectory()) {
 						deletefile(getNewFilePath(delpath + "\\" + filelist[i]));
@@ -175,6 +180,7 @@ public class UtilFile {
 			}
 
 		} catch (Exception e) {
+			log.error("文件删除失败：",e);
 			e.printStackTrace();
 		}
 		return true;
