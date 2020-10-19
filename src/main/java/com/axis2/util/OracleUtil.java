@@ -72,6 +72,11 @@ public class OracleUtil {
                 // 遍历ResultSet中的每条数据
                 String city=rs.getString("city");
                 String region = rs.getString("region");
+                String community_id = rs.getString("community_id");
+                String community_name = rs.getString("community_name");
+                String community_dis = rs.getString("community_dis");
+                String ue_x = rs.getString("ue_x");
+                String ue_y = rs.getString("ue_y");
                 String order_name = rs.getString("order_name");
                 String order_theme = rs.getString("order_theme");
                 String order_time = rs.getString("order_time");
@@ -113,6 +118,11 @@ public class OracleUtil {
                 jsonObj.put("accept_time_limit", accept_time_limit);
                 jsonObj.put("city", city);
                 jsonObj.put("region", region);
+                jsonObj.put("community_id", community_id);
+                jsonObj.put("community_name", community_name);
+                jsonObj.put("community_dis", community_dis);
+                jsonObj.put("ue_x", ue_x);
+                jsonObj.put("ue_y", ue_y);
                 jsonObj.put("complain_time", complain_time);
                 jsonObj.put("customer_name", customer_name);
                 jsonObj.put("customer_type", customer_type);
