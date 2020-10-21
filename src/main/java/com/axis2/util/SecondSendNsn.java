@@ -69,7 +69,6 @@ public class SecondSendNsn {
                 urlCon.setRequestProperty("X-Authorization-Ip", "10.173.128.22");
                 urlCon.setRequestProperty("X-Authorization-Key", "W1L6-0Z6U-N8CY-7423-4721");
 
-
                 DataOutputStream printout = new DataOutputStream(urlCon.getOutputStream());
                 printout.write(xmlData);
                 printout.flush();

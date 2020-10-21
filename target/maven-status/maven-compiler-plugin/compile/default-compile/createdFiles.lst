@@ -1,10 +1,14 @@
+com\axis2\util\CsvWriteUtils.class
 com\axis2\util\JdbcServer.class
 com\axis2\util\PeriodTask.class
+com\axis2\util\PlacementMatch.class
 com\axis2\util\XmlUtil.class
 com\axis2\util\CsvUtils.class
 com\axis2\ftp\XFtp.class
 com\axis2\service\EomsService.class
+com\axis2\util\SeqCheckPushUtil.class
 com\axis2\impl\EomsServiceImpl.class
+com\axis2\util\JWD.class
 com\axis2\test\Test1.class
 com\axis2\util\Task$1.class
 com\axis2\pojo\BaiduPoint.class
@@ -26,6 +30,7 @@ com\axis2\test\TestExcelRead.class
 com\axis2\pojo\Point.class
 com\axis2\test\TestClass.class
 com\axis2\test\TestFtpDown.class
+com\axis2\util\PoiScenePojo.class
 com\axis2\impl\ThreadRun.class
 com\axis2\impl\NsnServiceImpl.class
 com\axis2\util\CompressionUtil.class

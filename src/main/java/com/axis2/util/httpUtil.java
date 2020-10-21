@@ -76,7 +76,9 @@ public class httpUtil {
 
 //            System.out.println(String.valueOf(xmlData.length));
                 DataOutputStream printout = new DataOutputStream(urlCon.getOutputStream());
-                printout.write(xmlData);
+//              用这个方法服务器会产生乱码暂时不用  printout.write(xmlData);
+                printout.writeChars(xmlInfo);
+//                log.info(xmlInfo);
                 printout.flush();
                 printout.close();
                 instr = urlCon.getInputStream();

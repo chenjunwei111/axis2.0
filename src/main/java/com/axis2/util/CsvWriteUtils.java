@@ -143,8 +143,6 @@ public class CsvWriteUtils
                 al.put("name","SEQ占用小区CSV文件");
                 al.put("create_time",sdf.format(date));
                 al.put("file_size",size);
-//                //用完把本地生成的CSV文件删除了
-//                fileOutputStream.close();
                 file.delete();
                 return al;
             }else{
