@@ -66,7 +66,6 @@ public class OracleUtil {
 //            JSONObject jsonObj = new JSONObject();
             //转换为JSON集合
             JSONArray  array = new JSONArray () ;
-
             while (rs.next()) {
                 JSONObject jsonObj = new JSONObject(new LinkedHashMap());
                 // 遍历ResultSet中的每条数据
