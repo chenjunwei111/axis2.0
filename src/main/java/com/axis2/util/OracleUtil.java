@@ -68,6 +68,7 @@ public class OracleUtil {
             JSONArray  array = new JSONArray () ;
             while (rs.next()) {
                 JSONObject jsonObj = new JSONObject(new LinkedHashMap());
+
                 // 遍历ResultSet中的每条数据
                 String city=rs.getString("city");
                 String region = rs.getString("region");
