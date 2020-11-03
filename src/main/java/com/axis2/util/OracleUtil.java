@@ -74,6 +74,7 @@ public class OracleUtil {
                 String region = rs.getString("region");
                 String community_id = rs.getString("community_id");
                 String community_name = rs.getString("community_name");
+                String poi_tag = rs.getString("poi_tag");
                 String community_dis = rs.getString("community_dis");
                 String ue_x = rs.getString("ue_x");
                 String ue_y = rs.getString("ue_y");
@@ -120,6 +121,7 @@ public class OracleUtil {
                 jsonObj.put("region", region);
                 jsonObj.put("community_id", community_id);
                 jsonObj.put("community_name", community_name);
+                jsonObj.put("poi_tag", poi_tag);
                 jsonObj.put("community_dis", community_dis);
                 jsonObj.put("ue_x", ue_x);
                 jsonObj.put("ue_y", ue_y);
