@@ -96,6 +96,7 @@ public class OracleUtil {
                 String fault_area = rs.getString("fault_area");
                 String complain_city = rs.getString("complain_city");
                 String appeal_area = rs.getString("appeal_area");
+                String city_or_dual = rs.getString("city_or_dual");
                 String crm_ordernum = rs.getString("crm_ordernum");
                 String terminal_description = rs.getString("terminal_description");
                 String td_supported = rs.getString("td_supported");
@@ -140,6 +141,7 @@ public class OracleUtil {
                 jsonObj.put("complain_city", complain_city);
                 jsonObj.put("appeal_area", appeal_area);
                 jsonObj.put("crm_ordernum", crm_ordernum);
+                jsonObj.put("city_or_dual", city_or_dual);
                 jsonObj.put("terminal_description", terminal_description);
                 jsonObj.put("td_supported", td_supported);
                 jsonObj.put("analysis_condition", analysis_condition);
