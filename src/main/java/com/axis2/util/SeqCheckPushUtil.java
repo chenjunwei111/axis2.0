@@ -35,7 +35,7 @@ public class SeqCheckPushUtil {
                 "to_char(START_TIME,'yyyymmdd hh:mm:ss') START_TIME,to_char(END_TIME,'yyyymmdd hh:mm:ss') END_TIME," +
                 "MSISDN,substr(SECTOR_ID,6,20) CELL_ID from P_ACCEPT_CHH_INFO " +
                 "where substr(SECTOR_ID,6,20) is not null) A)) where MSISDN IN (" +"'"+customerTelRes+"','"+faultMsisdnRes+"')"
-                +" and day_id="+"'"+dayIdRes+"'";
+                +" and day_id>="+"'"+dayIdRes+"'";
 
         PreparedStatement pstmt = null;
         ResultSet rs = null;
