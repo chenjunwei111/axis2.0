@@ -6,12 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8db3a472-4332-4581-aeab-0858ed68626f" name="Default Changelist" comment="axis2.0_20201127(增加了地市)">
+    <list default="true" id="8db3a472-4332-4581-aeab-0858ed68626f" name="Default Changelist" comment="axis2.0_20210209(针对阙云淑反馈客户星级问题进行处理)">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/axis2/impl/EomsServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/axis2/impl/EomsServiceImpl.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/axis2/impl/ThreadRun.class" afterPath="$PROJECT_DIR$/target/classes/com/axis2/impl/ThreadRun.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/impl/EomsServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/impl/EomsServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/axis2/impl/ThreadRun.java" afterPath="$PROJECT_DIR$/src/main/java/com/axis2/impl/ThreadRun.java" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -924,7 +922,7 @@
       <workItem from="1612788249013" duration="4000" />
       <workItem from="1612834222700" duration="200000" />
       <workItem from="1612838467596" duration="5664000" />
-      <workItem from="1612851840295" duration="3000" />
+      <workItem from="1612851840295" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="axisSpdb 2.0">
       <created>1591709359261</created>
@@ -1143,11 +1141,18 @@
       <option name="project" value="LOCAL" />
       <updated>1611284529979</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="axis2.0_20210209(针对阙云淑反馈客户星级问题进行处理)">
+      <created>1612851869047</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1612851869047</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="650933000" />
+    <option name="totallyTimeSpent" value="650963000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -1291,7 +1296,8 @@
     <MESSAGE value="axis2.0_20210112(按照客户沟通需求调整seq推送规则)" />
     <MESSAGE value="axis2.0_20210122(主要添加数据同步到169的功能)" />
     <MESSAGE value="axis2.0_20201127(增加了地市)" />
-    <option name="LAST_COMMIT_MESSAGE" value="axis2.0_20201127(增加了地市)" />
+    <MESSAGE value="axis2.0_20210209(针对阙云淑反馈客户星级问题进行处理)" />
+    <option name="LAST_COMMIT_MESSAGE" value="axis2.0_20210209(针对阙云淑反馈客户星级问题进行处理)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
