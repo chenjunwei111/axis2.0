@@ -964,30 +964,38 @@ public class ThreadRun  extends Thread {
         if (strLevle == null) {
             return "0";
         }
-        Integer level = 0;
-        if (strLevle.indexOf("零星") != -1) {
-            level = 0;
+        Double level = 0.0;
+        if (strLevle.indexOf("未评级") != -1) {
+            level = 0.0;
+        }        //2021年2月9日区分五星金和五星钻
+          else if (strLevle.indexOf("金") != -1) {
+            level = 11.0;
+        } else if (strLevle.indexOf("钻") != -1) {
+            level = 12.0;
+        } else if (strLevle.indexOf("准星") != -1) {
+            level = 0.5;
         } else if (strLevle.indexOf("一星") != -1) {
-            level = 1;
+            level = 1.0;
         } else if (strLevle.indexOf("二星") != -1) {
-            level = 2;
+            level = 2.0;
         } else if (strLevle.indexOf("三星") != -1) {
-            level = 3;
+            level = 3.0;
         } else if (strLevle.indexOf("四星") != -1) {
-            level = 4;
+            level = 4.0;
         } else if (strLevle.indexOf("五星") != -1) {
-            level = 5;
+            level = 5.0;
         } else if (strLevle.indexOf("六星") != -1) {
-            level = 6;
+            level = 6.0;
         } else if (strLevle.indexOf("七星") != -1) {
-            level = 7;
+            level = 7.0;
         } else if (strLevle.indexOf("八星") != -1) {
-            level = 8;
+            level = 8.0;
         } else if (strLevle.indexOf("九星") != -1) {
-            level = 9;
+            level = 9.0;
         } else if (strLevle.indexOf("十星") != -1) {
-            level = 10;
+            level = 10.0;
         }
+
         return level.toString();
     }
 }
